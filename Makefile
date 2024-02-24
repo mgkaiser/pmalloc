@@ -31,6 +31,7 @@ obj/%.o: %.s
 
 obj/%.o: %.c
 	cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) -o $@ $<
+	#cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) --assembly-source $(@:%.o=%.s) -o $@ $<
 
 $(PRG): $(OBJS)
 	ln65816 --target=Foenix $(LINKER) --output-format=pgz $^ -o $@ $(LIBS) --cross-reference --rtattr printf=nofloat --rtattr cstartup=Foenix --list-file=$(PRG:%.pgz=%.lst)
