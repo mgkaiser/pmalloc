@@ -1,5 +1,5 @@
 # Output name
-PRG=pmalloc.pgz
+PRG=utils.pgz
 
 # Sources
 ASM_SRCS =
@@ -19,7 +19,7 @@ INC='/c/Program Files (x86)/Calypsi-65816/contrib/Foenix-SDK/include'
 DEST=~/SD/
 
 # Debug
-DEBUG=-D DEBUG
+#DEBUG=-D DEBUG
 
 # Other stuff
 VPATH = src
@@ -30,8 +30,8 @@ obj/%.o: %.s
 	as65816 --core=65816 $(MODEL) $(DEBUG)--target=Foenix --list-file=$(@:%.o=%.lst) -o $@ $<
 
 obj/%.o: %.c
-	cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) -o $@ $<
-	#cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) --assembly-source $(@:%.o=%.s) -o $@ $<
+	cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) -Iinc -o $@ $<
+	#cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) -Iinc --assembly-source $(@:%.o=%.s) -o $@ $<
 
 $(PRG): $(OBJS)
 	ln65816 --target=Foenix $(LINKER) --output-format=pgz $^ -o $@ $(LIBS) --cross-reference --rtattr printf=nofloat --rtattr cstartup=Foenix --list-file=$(PRG:%.pgz=%.lst)
