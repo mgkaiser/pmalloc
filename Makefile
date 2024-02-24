@@ -1,6 +1,7 @@
 # Output name
 PRG				= pmalloc_test.pgz
 LIB				= lib/pmalloc.a
+LIB_H			= inc/pmalloc.h
 
 # Sources
 ASM_SRCS 		=
@@ -20,6 +21,7 @@ INC				= '/c/Program Files (x86)/Calypsi-65816/contrib/Foenix-SDK/include'
 
 # Dest
 DEST			= ~/SD/
+LIB_DEST        = ../foenix_lib/
 
 # Debug
 #DEBUG			 = -D DEBUG
@@ -50,3 +52,5 @@ clean:
 
 install: all
 	-cp $(PRG) $(DEST)
+	-cp $(LIB) $(LIB_DEST)lib/
+	-cp $(LIB_H) $(LIB_DEST)inc/
