@@ -11,7 +11,7 @@ int main() {
 	pmalloc_init(pm);
 
 	// Make 64k of memory - in embedded systems, we'd actually give a static memory address and size.
-	char buffer[65536];
+	char buffer[32767];
 	pmalloc_addblock(pm, &buffer, 65536);
 
 	uint32_t len[6] = { 150, 256, 512, 100, 1024, 65536 };
