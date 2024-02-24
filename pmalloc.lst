@@ -1,7 +1,7 @@
 ###############################################################################
 #                                                                             #
 # Calypsi linker for 65816                                        version 5.2 #
-#                                                       24/Feb/2024  15:59:26 #
+#                                                       24/Feb/2024  16:03:27 #
 # Command line: --target=Foenix linker/c256-fmx-plain.scm                     #
 #               --output-format=pgz obj/example_basic.o obj/pmalloc.o -o      #
 #               pmalloc.pgz clib-lc-ld-foenix.a --cross-reference --rtattr    #
@@ -18,15 +18,15 @@
 
 Name                    Range         Size    Used    Checksum  Largest unallocated
 -----------------------------------------------------------------------------------
-LoMem-tiny              002100-0021ff 000100    9.0%  none      0000e9
+LoMem-tiny              002100-0021ff 000100    7.8%  none      0000ec
 LoMem                   002200-007fff 005e00   17.4%  none      004da2
   > LoMem-code          002200-00225d 00005e  100.0%  none      none
   > LoMem-nobits        00225e-00325d 001000  100.0%  none      004da2
 Vector                  00ffe4-00ffff 00001c    0.0%  none      00001c
-Banks-01                010000-01ffff 010000   19.9%  none      00cd15
+Banks-01                010000-01ffff 010000   19.6%  none      00cdc5
   > Banks-01-far-bits   010000-0101a2 0001a3  100.0%  none      none
   > Banks-01-far-nobits 0101a3-010325 000183  100.0%  none      none
-  > Banks-01-farcode    010326-0132ea 002fc5  100.0%  none      00cd15
+  > Banks-01-farcode    010326-01323a 002f15  100.0%  none      00cdc5
 Banks-02                020000-02ffff 010000    0.0%  none      00fff6
   > Banks-02-far-cbits  020000-020009 00000a  100.0%  none      00fff6
 Banks-03                030000-03ffff 010000    0.0%  none      010000
@@ -87,14 +87,14 @@ vram                    b00000-efffff 400000    0.0%  none      400000
 
 Name            Range          Size    Memory              Fragments
 --------------------------------------------------------------------
-registers       002100-002116  000017  LoMem-tiny          2
+registers       002100-002113  000014  LoMem-tiny          1
 code            002200-00225d  00005e  LoMem-code          5
 heap            00225e-00325d  001000  LoMem-nobits        1
 cfar            010000-0100ae  0000af  Banks-01-far-bits   13
 switch          0100af-0100de  000030  Banks-01-far-bits   2
 cfar            0100df-0101a2  0000c4  Banks-01-far-bits   5
 zfar            0101a3-010325  000183  Banks-01-far-nobits 10
-farcode         010326-0132ea  002fc5  Banks-01-farcode    102
+farcode         010326-01323a  002f15  Banks-01-farcode    100
 data_init_table 020000-020009  00000a  Banks-02-far-cbits  1
 
 
@@ -478,10 +478,10 @@ Unit Filename             Archive
 ---------------------------------------------
   0  obj/example_basic.o  -
           >  cfar    000045
-          >  farcode 000193
+          >  farcode 00018d
   1  obj/pmalloc.o        -
           >  cfar    00011f
-          >  farcode 000969
+          >  farcode 0008f4
   4  Foenix-startup.o     c256-lc-ld-foenix.a
           # picked based on cstartup=foenix (default for Foenix C256 board support)
           >  code    00005e
@@ -557,9 +557,6 @@ Unit Filename             Archive
           >  farcode 000038
  47  lib_libflushall.o    clib-lc-ld-foenix.a
           >  farcode 000078
- 48  spill.o              clib-lc-ld-foenix.a
-          >  farcode   000035
-          >  registers 000003
  49  integer.o            clib-lc-ld-foenix.a
           >  farcode 0000ed
  51  initialize.o         clib-lc-ld-foenix.a
@@ -591,14 +588,14 @@ Unit Filename             Archive
 g_nullstring in section 'cfar'  placed at address 010006-01000c of size 000007
 (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 2)
 
-_Const_000000000000000c in section 'cfar'
+_Const_000000000000000a in section 'cfar'
  placed at address 01000d-010014 of size 000008
-(obj/pmalloc.o unit 1 section index 36)
+(obj/pmalloc.o unit 1 section index 35)
     Defines:
-        _Const_000000000000000c = 01000d
+        _Const_000000000000000a = 01000d
     Referenced from:
+        (obj/pmalloc.o unit 1 section index 19)
         (obj/pmalloc.o unit 1 section index 20)
-        (obj/pmalloc.o unit 1 section index 21)
 
 `_StringLiteral_*float*` in section 'cfar'
  placed at address 010015-01001c of size 000008
@@ -610,7 +607,7 @@ _Const_000000000000000c in section 'cfar'
 
 `_StringLiteral_[110,111,100,101,32,61,32,37,112,13]` in section 'cfar'
  placed at address 01001d-010027 of size 00000b
-(obj/pmalloc.o unit 1 section index 45)
+(obj/pmalloc.o unit 1 section index 44)
     Defines:
         `_StringLiteral_[110,111,100,101,32,61,32,37,112,13]` = 01001d
     Referenced from:
@@ -618,7 +615,7 @@ _Const_000000000000000c in section 'cfar'
 
 `_StringLiteral_[112,116,114,32,32,61,32,37,112,13]` in section 'cfar'
  placed at address 010028-010032 of size 00000b
-(obj/pmalloc.o unit 1 section index 47)
+(obj/pmalloc.o unit 1 section index 46)
     Defines:
         `_StringLiteral_[112,116,114,32,32,61,32,37,112,13]` = 010028
     Referenced from:
@@ -634,7 +631,7 @@ _Const_000000000000000c in section 'cfar'
 
 `_StringLiteral_[32,45,32,97,115,115,105,103,110,101,100,58,13]` in section 'cfar'
  placed at address 010040-01004d of size 00000e
-(obj/pmalloc.o unit 1 section index 39)
+(obj/pmalloc.o unit 1 section index 38)
     Defines:
         `_StringLiteral_[32,45,32,97,115,115,105,103,110,101,100,58,13]` = 010040
     Referenced from:
@@ -642,7 +639,7 @@ _Const_000000000000000c in section 'cfar'
 
 `_StringLiteral_[32,45,32,97,118,97,105,108,97,98,108,101,58,13]` in section 'cfar'
  placed at address 01004e-01005c of size 00000f
-(obj/pmalloc.o unit 1 section index 40)
+(obj/pmalloc.o unit 1 section index 39)
     Defines:
         `_StringLiteral_[32,45,32,97,118,97,105,108,97,98,108,101,58,13]` = 01004e
     Referenced from:
@@ -650,7 +647,7 @@ _Const_000000000000000c in section 'cfar'
 
 `_StringLiteral_[32,45,32,102,114,101,101,109,101,109,58,32,37,108,117,13]` in section 'cfar'
  placed at address 01005d-01006d of size 000011
-(obj/pmalloc.o unit 1 section index 41)
+(obj/pmalloc.o unit 1 section index 40)
     Defines:
         `_StringLiteral_[32,45,32,102,114,101,101,109,101,109,58,32,37,108,117,13]` = 01005d
     Referenced from:
@@ -658,7 +655,7 @@ _Const_000000000000000c in section 'cfar'
 
 `_StringLiteral_[32,45,32,116,111,116,97,108,109,101,109,58,32,37,108,117,13]` in section 'cfar'
  placed at address 01006e-01007f of size 000012
-(obj/pmalloc.o unit 1 section index 42)
+(obj/pmalloc.o unit 1 section index 41)
     Defines:
         `_StringLiteral_[32,45,32,116,111,116,97,108,109,101,109,58,32,37,108,117,13]` = 01006e
     Referenced from:
@@ -666,7 +663,7 @@ _Const_000000000000000c in section 'cfar'
 
 `_StringLiteral_[45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,13]` in section 'cfar'
  placed at address 010080-010096 of size 000017
-(obj/pmalloc.o unit 1 section index 44)
+(obj/pmalloc.o unit 1 section index 43)
     Defines:
         `_StringLiteral_[45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,13]` = 010080
     Referenced from:
@@ -674,7 +671,7 @@ _Const_000000000000000c in section 'cfar'
 
 `_StringLiteral_[112,109,97,108,108,111,99,58,32,68,69,66,85,71,32,69,110,97,98,108,101,100,13]` in section 'cfar'
  placed at address 010097-0100ae of size 000018
-(obj/pmalloc.o unit 1 section index 46)
+(obj/pmalloc.o unit 1 section index 45)
     Defines:
         `_StringLiteral_[112,109,97,108,108,111,99,58,32,68,69,66,85,71,32,69,110,97,98,108,101,100,13]` = 010097
     Referenced from:
@@ -704,25 +701,25 @@ _Const_000000000000000c in section 'cfar'
 
 `_StringLiteral_[32,45,32,116,111,116,97,108,110,111,100,101,115,58,32,37,108,117,32,40,115,105,122,101,111,102,32,37,100,41,13]` in section 'cfar'
  placed at address 010111-010130 of size 000020
-(obj/pmalloc.o unit 1 section index 43)
+(obj/pmalloc.o unit 1 section index 42)
     Defines:
         `_StringLiteral_[32,45,32,116,111,116,97,108,110,111,100,101,115,58,32,37,108,117,32,40,115,105,122,101,111,102,32,37,100,41,13]` = 010111
     Referenced from:
         pmalloc_dump_stats (obj/pmalloc.o unit 1 section index 14)
 
-`_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]` in section 'cfar'
+`_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]` in section 'cfar'
  placed at address 010131-010169 of size 000039
-(obj/pmalloc.o unit 1 section index 37)
+(obj/pmalloc.o unit 1 section index 36)
     Defines:
-        `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]` = 010131
+        `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]` = 010131
     Referenced from:
         pmalloc_dump_stats (obj/pmalloc.o unit 1 section index 14)
 
-`_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]` in section 'cfar'
+`_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]` in section 'cfar'
  placed at address 01016a-0101a2 of size 000039
-(obj/pmalloc.o unit 1 section index 38)
+(obj/pmalloc.o unit 1 section index 37)
     Defines:
-        `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]` = 01016a
+        `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]` = 01016a
     Referenced from:
         pmalloc_dump_stats (obj/pmalloc.o unit 1 section index 14)
 
@@ -860,8 +857,8 @@ _Stub_exit in section 'farcode'  placed at address 01033c-010340 of size 000005
     Referenced from:
         _Exit (exitC99.o (from clib-lc-ld-foenix.a) unit 11 section index 2)
 
-`?L174` in section 'farcode'  placed at address 010341-010346 of size 000006
-(obj/pmalloc.o unit 1 section index 25)
+`?L167` in section 'farcode'  placed at address 010341-010346 of size 000006
+(obj/pmalloc.o unit 1 section index 23)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         printf in (lib_printf.o (from clib-lc-ld-foenix.a) unit 28 section index 2)
@@ -884,194 +881,192 @@ _Stub_lseek in section 'farcode'
     Referenced from:
         fseek (lib_fseek.o (from clib-lc-ld-foenix.a) unit 42 section index 2)
 
-`?L407` in section 'farcode'  placed at address 01035c-010363 of size 000008
+`?L175` in section 'farcode'  placed at address 01035c-010363 of size 000008
+(obj/pmalloc.o unit 1 section index 31)
+
+`?L407` in section 'farcode'  placed at address 010364-01036b of size 000008
 (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 12)
 
-memcpy in section 'farcode'  placed at address 010364-01036b of size 000008
+memcpy in section 'farcode'  placed at address 01036c-010373 of size 000008
 (vram_copy.o (from c256-lc-ld-foenix.a) unit 53 section index 2)
     Defines:
-        memcpy = 010364
+        memcpy = 01036c
     References:
         memcpy_dma in (memcpy_dma.o (from c256-lc-ld-foenix.a) unit 55 section index 2)
     Referenced from:
         __initialize_sections (initialize.o (from clib-lc-ld-foenix.a) unit 51 section index 2)
 
-`?L177` in section 'farcode'  placed at address 01036c-010374 of size 000009
-(obj/pmalloc.o unit 1 section index 28)
+pmalloc_sizeof in section 'farcode'
+ placed at address 010374-01037c of size 000009
+(obj/pmalloc.o unit 1 section index 7)
+    Defines:
+        pmalloc_sizeof = 010374
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L403` in section 'farcode'  placed at address 010375-01037d of size 000009
+`?L170` in section 'farcode'  placed at address 01037d-010385 of size 000009
+(obj/pmalloc.o unit 1 section index 26)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
+`?L403` in section 'farcode'  placed at address 010386-01038e of size 000009
 (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 8)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L404` in section 'farcode'  placed at address 01037e-010386 of size 000009
+`?L404` in section 'farcode'  placed at address 01038f-010397 of size 000009
 (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 9)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L406` in section 'farcode'  placed at address 010387-01038f of size 000009
+`?L406` in section 'farcode'  placed at address 010398-0103a0 of size 000009
 (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 11)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L408` in section 'farcode'  placed at address 010390-010398 of size 000009
+`?L408` in section 'farcode'  placed at address 0103a1-0103a9 of size 000009
 (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 13)
 
-`?L166` in section 'farcode'  placed at address 010399-0103a2 of size 00000a
-(obj/pmalloc.o unit 1 section index 18)
+`?L160` in section 'farcode'  placed at address 0103aa-0103b3 of size 00000a
+(obj/pmalloc.o unit 1 section index 17)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L183` in section 'farcode'  placed at address 0103a3-0103ad of size 00000b
+`?L176` in section 'farcode'  placed at address 0103b4-0103be of size 00000b
+(obj/pmalloc.o unit 1 section index 32)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
+`?L177` in section 'farcode'  placed at address 0103bf-0103c9 of size 00000b
+(obj/pmalloc.o unit 1 section index 33)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
+`?L178` in section 'farcode'  placed at address 0103ca-0103d4 of size 00000b
 (obj/pmalloc.o unit 1 section index 34)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L184` in section 'farcode'  placed at address 0103ae-0103b8 of size 00000b
-(obj/pmalloc.o unit 1 section index 35)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L23` in section 'farcode'  placed at address 0103b9-0103c3 of size 00000b
+`?L23` in section 'farcode'  placed at address 0103d5-0103df of size 00000b
 (free.o (from clib-lc-ld-foenix.a) unit 21 section index 3)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L413` in section 'farcode'  placed at address 0103c4-0103ce of size 00000b
+`?L413` in section 'farcode'  placed at address 0103e0-0103ea of size 00000b
 (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 17)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L414` in section 'farcode'  placed at address 0103cf-0103d9 of size 00000b
+`?L414` in section 'farcode'  placed at address 0103eb-0103f5 of size 00000b
 (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 18)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L35` in section 'farcode'  placed at address 0103da-0103e5 of size 00000c
+`?L32` in section 'farcode'  placed at address 0103f6-010401 of size 00000c
 (obj/example_basic.o unit 0 section index 3)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         pmalloc_dump_stats in (obj/pmalloc.o unit 1 section index 14)
 
-pmalloc_sizeof in section 'farcode'
- placed at address 0103e6-0103f1 of size 00000c
-(obj/pmalloc.o unit 1 section index 7)
-    Defines:
-        pmalloc_sizeof = 0103e6
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
 pmalloc_totalmem in section 'farcode'
- placed at address 0103f2-0103fd of size 00000c
+ placed at address 010402-01040d of size 00000c
 (obj/pmalloc.o unit 1 section index 8)
     Defines:
-        pmalloc_totalmem = 0103f2
+        pmalloc_totalmem = 010402
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L165` in section 'farcode'  placed at address 0103fe-010409 of size 00000c
-(obj/pmalloc.o unit 1 section index 17)
+`?L161` in section 'farcode'  placed at address 01040e-010419 of size 00000c
+(obj/pmalloc.o unit 1 section index 18)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L167` in section 'farcode'  placed at address 01040a-010415 of size 00000c
-(obj/pmalloc.o unit 1 section index 19)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L173` in section 'farcode'  placed at address 010416-010421 of size 00000c
-(obj/pmalloc.o unit 1 section index 24)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L178` in section 'farcode'  placed at address 010422-01042d of size 00000c
-(obj/pmalloc.o unit 1 section index 29)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L179` in section 'farcode'  placed at address 01042e-010439 of size 00000c
-(obj/pmalloc.o unit 1 section index 30)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L180` in section 'farcode'  placed at address 01043a-010445 of size 00000c
-(obj/pmalloc.o unit 1 section index 31)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L181` in section 'farcode'  placed at address 010446-010451 of size 00000c
-(obj/pmalloc.o unit 1 section index 32)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L182` in section 'farcode'  placed at address 010452-01045d of size 00000c
-(obj/pmalloc.o unit 1 section index 33)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L402` in section 'farcode'  placed at address 01045e-010469 of size 00000c
-(__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 7)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L405` in section 'farcode'  placed at address 01046a-010475 of size 00000c
-(__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 10)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L409` in section 'farcode'  placed at address 010476-010481 of size 00000c
-(__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 14)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L170` in section 'farcode'  placed at address 010482-01048e of size 00000d
+`?L166` in section 'farcode'  placed at address 01041a-010425 of size 00000c
 (obj/pmalloc.o unit 1 section index 22)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-        printf in (lib_printf.o (from clib-lc-ld-foenix.a) unit 28 section index 2)
 
-`?L27` in section 'farcode'  placed at address 01048f-01049b of size 00000d
-(memset_dma.o (from c256-lc-ld-foenix.a) unit 26 section index 3)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L176` in section 'farcode'  placed at address 01049c-0104a9 of size 00000e
+`?L171` in section 'farcode'  placed at address 010426-010431 of size 00000c
 (obj/pmalloc.o unit 1 section index 27)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
+`?L172` in section 'farcode'  placed at address 010432-01043d of size 00000c
+(obj/pmalloc.o unit 1 section index 28)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
+`?L173` in section 'farcode'  placed at address 01043e-010449 of size 00000c
+(obj/pmalloc.o unit 1 section index 29)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
+`?L174` in section 'farcode'  placed at address 01044a-010455 of size 00000c
+(obj/pmalloc.o unit 1 section index 30)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
+`?L402` in section 'farcode'  placed at address 010456-010461 of size 00000c
+(__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 7)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
+`?L405` in section 'farcode'  placed at address 010462-01046d of size 00000c
+(__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 10)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
+`?L409` in section 'farcode'  placed at address 01046e-010479 of size 00000c
+(__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 14)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
+`?L164` in section 'farcode'  placed at address 01047a-010486 of size 00000d
+(obj/pmalloc.o unit 1 section index 21)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+        printf in (lib_printf.o (from clib-lc-ld-foenix.a) unit 28 section index 2)
+
+`?L27` in section 'farcode'  placed at address 010487-010493 of size 00000d
+(memset_dma.o (from c256-lc-ld-foenix.a) unit 26 section index 3)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
+`?L169` in section 'farcode'  placed at address 010494-0104a1 of size 00000e
+(obj/pmalloc.o unit 1 section index 25)
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
 _JmpIndLong in section 'farcode'
- placed at address 0104aa-0104b7 of size 00000e
+ placed at address 0104a2-0104af of size 00000e
 (controlFlow.o (from clib-lc-ld-foenix.a) unit 9 section index 3)
     Defines:
-        _JmpIndLong = 0104aa
+        _JmpIndLong = 0104a2
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
     Referenced from:
         exit (exit.o (from clib-lc-ld-foenix.a) unit 7 section index 2)
         (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 5)
 
-`?L175` in section 'farcode'  placed at address 0104b8-0104c6 of size 00000f
-(obj/pmalloc.o unit 1 section index 26)
+`?L168` in section 'farcode'  placed at address 0104b0-0104be of size 00000f
+(obj/pmalloc.o unit 1 section index 24)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L23` in section 'farcode'  placed at address 0104c7-0104d5 of size 00000f
+`?L23` in section 'farcode'  placed at address 0104bf-0104cd of size 00000f
 (heap_initialize.o (from clib-lc-ld-foenix.a) unit 23 section index 4)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L29` in section 'farcode'  placed at address 0104d6-0104e4 of size 00000f
+`?L29` in section 'farcode'  placed at address 0104ce-0104dc of size 00000f
 (memcpy_dma.o (from c256-lc-ld-foenix.a) unit 55 section index 5)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-memset in section 'farcode'  placed at address 0104e5-0104f4 of size 000010
+memset in section 'farcode'  placed at address 0104dd-0104ec of size 000010
 (vram_fill.o (from c256-lc-ld-foenix.a) unit 24 section index 2)
     Defines:
-        memset = 0104e5
+        memset = 0104dd
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         memset_dma in (memset_dma.o (from c256-lc-ld-foenix.a) unit 26 section index 2)
@@ -1079,63 +1074,58 @@ memset in section 'farcode'  placed at address 0104e5-0104f4 of size 000010
         __heap_initialize (heap_initialize.o (from clib-lc-ld-foenix.a) unit 23 section index 3)
         __initialize_sections (initialize.o (from clib-lc-ld-foenix.a) unit 51 section index 2)
 
-`?L161` in section 'farcode'  placed at address 0104f5-010505 of size 000011
+`?L156` in section 'farcode'  placed at address 0104ed-0104fd of size 000011
 (obj/pmalloc.o unit 1 section index 15)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L162` in section 'farcode'  placed at address 010506-010517 of size 000012
+`?L157` in section 'farcode'  placed at address 0104fe-01050f of size 000012
 (obj/pmalloc.o unit 1 section index 16)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L172` in section 'farcode'  placed at address 010518-01052b of size 000014
-(obj/pmalloc.o unit 1 section index 23)
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-`?L28` in section 'farcode'  placed at address 01052c-010540 of size 000015
+`?L28` in section 'farcode'  placed at address 010510-010524 of size 000015
 (memcpy_dma.o (from c256-lc-ld-foenix.a) unit 55 section index 4)
     References:
         DMA_wait_delay in (dma.o (from c256-lc-ld-foenix.a) unit 27 section index 2)
 
 _DivModSign32 in section 'farcode'
- placed at address 010541-010556 of size 000016
+ placed at address 010525-01053a of size 000016
 (integer.o (from clib-lc-ld-foenix.a) unit 49 section index 14)
     Defines:
-        _DivModSign32 = 010541
+        _DivModSign32 = 010525
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L37` in section 'farcode'  placed at address 010557-01056c of size 000016
+`?L37` in section 'farcode'  placed at address 01053b-010550 of size 000016
 (lib_libfflush.o (from clib-lc-ld-foenix.a) unit 37 section index 3)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
 pmalloc_usedmem in section 'farcode'
- placed at address 01056d-010585 of size 000019
+ placed at address 010551-010569 of size 000019
 (obj/pmalloc.o unit 1 section index 10)
     Defines:
-        pmalloc_usedmem = 01056d
+        pmalloc_usedmem = 010551
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L168` in section 'farcode'  placed at address 010586-01059e of size 000019
+`?L162` in section 'farcode'  placed at address 01056a-010582 of size 000019
+(obj/pmalloc.o unit 1 section index 19)
+    References:
+        _Const_000000000000000a in (obj/pmalloc.o unit 1 section index 35)
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+
+`?L163` in section 'farcode'  placed at address 010583-01059b of size 000019
 (obj/pmalloc.o unit 1 section index 20)
     References:
-        _Const_000000000000000c in (obj/pmalloc.o unit 1 section index 36)
+        _Const_000000000000000a in (obj/pmalloc.o unit 1 section index 35)
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-`?L169` in section 'farcode'  placed at address 01059f-0105b7 of size 000019
-(obj/pmalloc.o unit 1 section index 21)
-    References:
-        _Const_000000000000000c in (obj/pmalloc.o unit 1 section index 36)
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-
-__close in section 'farcode'  placed at address 0105b8-0105d1 of size 00001a
+__close in section 'farcode'  placed at address 01059c-0105b5 of size 00001a
 (lib_fclose.o (from clib-lc-ld-foenix.a) unit 19 section index 2)
     Defines:
-        __close = 0105b8
+        __close = 01059c
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         _Stub_close in (stub_close.o (from c256-lc-ld-foenix.a) unit 17 section index 2)
@@ -1144,17 +1134,17 @@ __close in section 'farcode'  placed at address 0105b8-0105d1 of size 00001a
         fclose (lib_fclose.o (from clib-lc-ld-foenix.a) unit 19 section index 3)
 
 stdoutstream_flush in section 'farcode'
- placed at address 0105d2-0105ec of size 00001b
+ placed at address 0105b6-0105d0 of size 00001b
 (lib_stdoutstream.o (from clib-lc-ld-foenix.a) unit 34 section index 3)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __lib_fflush in (lib_libfflush.o (from clib-lc-ld-foenix.a) unit 37 section index 2)
 
 __lib_vsprintf in section 'farcode'
- placed at address 0105ed-01060a of size 00001e
+ placed at address 0105d1-0105ee of size 00001e
 (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 6)
     Defines:
-        __lib_vsprintf = 0105ed
+        __lib_vsprintf = 0105d1
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
     Referenced from:
@@ -1162,76 +1152,69 @@ __lib_vsprintf in section 'farcode'
         (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 5)
 
 __lib_wrflush in section 'farcode'
- placed at address 01060b-01062b of size 000021
+ placed at address 0105ef-01060f of size 000021
 (lib_wrflush.o (from clib-lc-ld-foenix.a) unit 45 section index 2)
     Defines:
-        __lib_wrflush = 01060b
+        __lib_wrflush = 0105ef
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __lib_fflush in (lib_libfflush.o (from clib-lc-ld-foenix.a) unit 37 section index 2)
     Referenced from:
         fseek (lib_fseek.o (from clib-lc-ld-foenix.a) unit 42 section index 2)
 
-_Mul32 in section 'farcode'  placed at address 01062c-010650 of size 000025
+_Mul32 in section 'farcode'  placed at address 010610-010634 of size 000025
 (integer.o (from clib-lc-ld-foenix.a) unit 49 section index 3)
     Defines:
-        _Mul32 = 01062c
+        _Mul32 = 010610
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
     Referenced from:
         main (obj/example_basic.o unit 0 section index 2)
 
-`?L27` in section 'farcode'  placed at address 010651-010677 of size 000027
+`?L27` in section 'farcode'  placed at address 010635-01065b of size 000027
 (memcpy_dma.o (from c256-lc-ld-foenix.a) unit 55 section index 3)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-strnlen in section 'farcode'  placed at address 010678-0106a1 of size 00002a
+strnlen in section 'farcode'  placed at address 01065c-010685 of size 00002a
 (lib_strnlen.o (from clib-lc-ld-foenix.a) unit 56 section index 2)
     Defines:
-        strnlen = 010678
+        strnlen = 01065c
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
     Referenced from:
         (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 5)
 
 pmalloc_overheadmem in section 'farcode'
- placed at address 0106a2-0106cc of size 00002b
+ placed at address 010686-0106b0 of size 00002b
 (obj/pmalloc.o unit 1 section index 11)
     Defines:
-        pmalloc_overheadmem = 0106a2
+        pmalloc_overheadmem = 010686
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
 
-atexit in section 'farcode'  placed at address 0106cd-0106f9 of size 00002d
+atexit in section 'farcode'  placed at address 0106b1-0106dd of size 00002d
 (atexit.o (from clib-lc-ld-foenix.a) unit 10 section index 4)
     Defines:
-        atexit = 0106cd
+        atexit = 0106b1
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __atexit in (atexit.o (from clib-lc-ld-foenix.a) unit 10 section index 2)
         __atexit_index in (atexit.o (from clib-lc-ld-foenix.a) unit 10 section index 3)
 
-__size2ndx in section 'farcode'  placed at address 0106fa-01072b of size 000032
+__size2ndx in section 'farcode'  placed at address 0106de-01070f of size 000032
 (addfreechunk.o (from clib-lc-ld-foenix.a) unit 22 section index 2)
     Defines:
-        __size2ndx = 0106fa
+        __size2ndx = 0106de
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
     Referenced from:
         __addfreechunk (addfreechunk.o (from clib-lc-ld-foenix.a) unit 22 section index 3)
 
-_FillDP4 in section 'farcode'  placed at address 01072c-010760 of size 000035
-(spill.o (from clib-lc-ld-foenix.a) unit 48 section index 4)
-    Defines:
-        _FillDP4 = 01072c
-    Referenced from:
-        main (obj/example_basic.o unit 0 section index 2)
-
-fflush in section 'farcode'  placed at address 010761-010798 of size 000038
+fflush in section 'farcode'  placed at address 010710-010747 of size 000038
 (lib_fflush.o (from clib-lc-ld-foenix.a) unit 46 section index 2)
     Defines:
-        fflush = 010761
+        fflush = 010710
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __global_streams in (streamlist.o (from clib-lc-ld-foenix.a) unit 16 section index 6)
@@ -1243,10 +1226,10 @@ fflush in section 'farcode'  placed at address 010761-010798 of size 000038
         fclose (lib_fclose.o (from clib-lc-ld-foenix.a) unit 19 section index 3)
         __lib_flushall (lib_libflushall.o (from clib-lc-ld-foenix.a) unit 47 section index 2)
 
-printf in section 'farcode'  placed at address 010799-0107d9 of size 000041
+printf in section 'farcode'  placed at address 010748-010788 of size 000041
 (lib_printf.o (from clib-lc-ld-foenix.a) unit 28 section index 2)
     Defines:
-        printf = 010799
+        printf = 010748
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __global_streams in (streamlist.o (from clib-lc-ld-foenix.a) unit 16 section index 6)
@@ -1255,26 +1238,26 @@ printf in section 'farcode'  placed at address 010799-0107d9 of size 000041
         main (obj/example_basic.o unit 0 section index 2)
         pmalloc_init (obj/pmalloc.o unit 1 section index 2)
         pmalloc_dump_stats (obj/pmalloc.o unit 1 section index 14)
-        (obj/pmalloc.o unit 1 section index 22)
-        (obj/pmalloc.o unit 1 section index 25)
+        (obj/pmalloc.o unit 1 section index 21)
+        (obj/pmalloc.o unit 1 section index 23)
 
 pmalloc_init in section 'farcode'
- placed at address 0107da-010824 of size 00004b
+ placed at address 010789-0107d3 of size 00004b
 (obj/pmalloc.o unit 1 section index 2)
     Defines:
-        pmalloc_init = 0107da
+        pmalloc_init = 010789
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-        `_StringLiteral_[112,109,97,108,108,111,99,58,32,68,69,66,85,71,32,69,110,97,98,108,101,100,13]` in (obj/pmalloc.o unit 1 section index 46)
+        `_StringLiteral_[112,109,97,108,108,111,99,58,32,68,69,66,85,71,32,69,110,97,98,108,101,100,13]` in (obj/pmalloc.o unit 1 section index 45)
         printf in (lib_printf.o (from clib-lc-ld-foenix.a) unit 28 section index 2)
     Referenced from:
         main (obj/example_basic.o unit 0 section index 2)
 
 __initialize_global_streams in section 'farcode'
- placed at address 010825-010875 of size 000051
+ placed at address 0107d4-010824 of size 000051
 (streamlist.o (from clib-lc-ld-foenix.a) unit 16 section index 8)
     Defines:
-        __initialize_global_streams = 010825
+        __initialize_global_streams = 0107d4
     References:
         _ExitCloseStreams in (streamlist.o (from clib-lc-ld-foenix.a) unit 16 section index 2)
         __global_streams in (streamlist.o (from clib-lc-ld-foenix.a) unit 16 section index 6)
@@ -1282,10 +1265,10 @@ __initialize_global_streams in section 'farcode'
         __call_initialize_global_streams (Foenix-startup.o (from c256-lc-ld-foenix.a) unit 4 section index 4)
 
 __lib_stdoutstream in section 'farcode'
- placed at address 010876-0108c7 of size 000052
+ placed at address 010825-010876 of size 000052
 (lib_stdoutstream.o (from clib-lc-ld-foenix.a) unit 34 section index 4)
     Defines:
-        __lib_stdoutstream = 010876
+        __lib_stdoutstream = 010825
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __lib_noflush in (lib_libnoflush.o (from clib-lc-ld-foenix.a) unit 35 section index 2)
@@ -1293,10 +1276,10 @@ __lib_stdoutstream in section 'farcode'
         vfprintf (lib_vfprintf.o (from clib-lc-ld-foenix.a) unit 29 section index 2)
 
 _Stub_write in section 'farcode'
- placed at address 0108c8-01091b of size 000054
+ placed at address 010877-0108ca of size 000054
 (stub_write.o (from c256-lc-ld-foenix.a) unit 38 section index 2)
     Defines:
-        _Stub_write = 0108c8
+        _Stub_write = 010877
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         errno in (errno.o (from clib-lc-ld-foenix.a) unit 20 section index 2)
@@ -1304,10 +1287,10 @@ _Stub_write in section 'farcode'
         __lib_fflush (lib_libfflush.o (from clib-lc-ld-foenix.a) unit 37 section index 2)
         __lib_fwrite (lib_libfwrite.o (from clib-lc-ld-foenix.a) unit 40 section index 2)
 
-exit in section 'farcode'  placed at address 01091c-010971 of size 000056
+exit in section 'farcode'  placed at address 0108cb-010920 of size 000056
 (exit.o (from clib-lc-ld-foenix.a) unit 7 section index 2)
     Defines:
-        exit = 01091c
+        exit = 0108cb
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         _Exit in (exitC99.o (from clib-lc-ld-foenix.a) unit 11 section index 2)
@@ -1318,10 +1301,10 @@ exit in section 'farcode'  placed at address 01091c-010971 of size 000056
     Referenced from:
         (Foenix-startup.o (from c256-lc-ld-foenix.a) unit 4 section index 6)
 
-vfprintf in section 'farcode'  placed at address 010972-0109c9 of size 000058
+vfprintf in section 'farcode'  placed at address 010921-010978 of size 000058
 (lib_vfprintf.o (from clib-lc-ld-foenix.a) unit 29 section index 2)
     Defines:
-        vfprintf = 010972
+        vfprintf = 010921
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __lib_stdoutstream in (lib_stdoutstream.o (from clib-lc-ld-foenix.a) unit 34 section index 4)
@@ -1330,7 +1313,7 @@ vfprintf in section 'farcode'  placed at address 010972-0109c9 of size 000058
         printf (lib_printf.o (from clib-lc-ld-foenix.a) unit 28 section index 2)
 
 closeAllStreams in section 'farcode'
- placed at address 0109ca-010a25 of size 00005c
+ placed at address 010979-0109d4 of size 00005c
 (streamlist.o (from clib-lc-ld-foenix.a) unit 16 section index 7)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
@@ -1339,7 +1322,7 @@ closeAllStreams in section 'farcode'
         __global_streams in (streamlist.o (from clib-lc-ld-foenix.a) unit 16 section index 6)
         fflush in (lib_fflush.o (from clib-lc-ld-foenix.a) unit 46 section index 2)
 
-`?L3` in section 'farcode'  placed at address 010a26-010a82 of size 00005d
+`?L3` in section 'farcode'  placed at address 0109d5-010a31 of size 00005d
 (lib_stdoutstream.o (from clib-lc-ld-foenix.a) unit 34 section index 2)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
@@ -1347,20 +1330,20 @@ closeAllStreams in section 'farcode'
         fputc in (lib_fputc.o (from clib-lc-ld-foenix.a) unit 36 section index 2)
 
 __lib_flushall in section 'farcode'
- placed at address 010a83-010afa of size 000078
+ placed at address 010a32-010aa9 of size 000078
 (lib_libflushall.o (from clib-lc-ld-foenix.a) unit 47 section index 2)
     Defines:
-        __lib_flushall = 010a83
+        __lib_flushall = 010a32
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         fflush in (lib_fflush.o (from clib-lc-ld-foenix.a) unit 46 section index 2)
     Referenced from:
         fflush (lib_fflush.o (from clib-lc-ld-foenix.a) unit 46 section index 2)
 
-fseek in section 'farcode'  placed at address 010afb-010b75 of size 00007b
+fseek in section 'farcode'  placed at address 010aaa-010b24 of size 00007b
 (lib_fseek.o (from clib-lc-ld-foenix.a) unit 42 section index 2)
     Defines:
-        fseek = 010afb
+        fseek = 010aaa
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         _Stub_lseek in (stub_lseek.o (from c256-lc-ld-foenix.a) unit 43 section index 2)
@@ -1369,10 +1352,10 @@ fseek in section 'farcode'  placed at address 010afb-010b75 of size 00007b
     Referenced from:
         __lib_rdflush (lib_rdflush.o (from clib-lc-ld-foenix.a) unit 41 section index 2)
 
-fputc in section 'farcode'  placed at address 010b76-010bf4 of size 00007f
+fputc in section 'farcode'  placed at address 010b25-010ba3 of size 00007f
 (lib_fputc.o (from clib-lc-ld-foenix.a) unit 36 section index 2)
     Defines:
-        fputc = 010b76
+        fputc = 010b25
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __lib_fflush in (lib_libfflush.o (from clib-lc-ld-foenix.a) unit 37 section index 2)
@@ -1381,10 +1364,10 @@ fputc in section 'farcode'  placed at address 010b76-010bf4 of size 00007f
         (lib_stdoutstream.o (from clib-lc-ld-foenix.a) unit 34 section index 2)
 
 pmalloc_item_remove in section 'farcode'
- placed at address 010bf5-010c77 of size 000083
+ placed at address 010ba4-010c26 of size 000083
 (obj/pmalloc.o unit 1 section index 13)
     Defines:
-        pmalloc_item_remove = 010bf5
+        pmalloc_item_remove = 010ba4
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
     Referenced from:
@@ -1393,10 +1376,10 @@ pmalloc_item_remove in section 'farcode'
         pmalloc_merge (obj/pmalloc.o unit 1 section index 6)
 
 __initialize_sections in section 'farcode'
- placed at address 010c78-010cfa of size 000083
+ placed at address 010c27-010ca9 of size 000083
 (initialize.o (from clib-lc-ld-foenix.a) unit 51 section index 2)
     Defines:
-        __initialize_sections = 010c78
+        __initialize_sections = 010c27
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         memcpy in (vram_copy.o (from c256-lc-ld-foenix.a) unit 53 section index 2)
@@ -1405,20 +1388,20 @@ __initialize_sections in section 'farcode'
         __data_initialization_needed (Foenix-startup.o (from c256-lc-ld-foenix.a) unit 4 section index 3)
 
 _ValueSwitch16 in section 'farcode'
- placed at address 010cfb-010d82 of size 000088
+ placed at address 010caa-010d31 of size 000088
 (vswitch16.o (from clib-lc-ld-foenix.a) unit 57 section index 2)
     Defines:
-        _ValueSwitch16 = 010cfb
+        _ValueSwitch16 = 010caa
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
     Referenced from:
         (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 5)
 
 pmalloc_addblock in section 'farcode'
- placed at address 010d83-010e10 of size 00008e
+ placed at address 010d32-010dbf of size 00008e
 (obj/pmalloc.o unit 1 section index 3)
     Defines:
-        pmalloc_addblock = 010d83
+        pmalloc_addblock = 010d32
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         pmalloc_item_insert in (obj/pmalloc.o unit 1 section index 12)
@@ -1426,14 +1409,14 @@ pmalloc_addblock in section 'farcode'
         main (obj/example_basic.o unit 0 section index 2)
 
 pmalloc_free in section 'farcode'
- placed at address 010e11-010e9e of size 00008e
+ placed at address 010dc0-010e51 of size 000092
 (obj/pmalloc.o unit 1 section index 5)
     Defines:
-        pmalloc_free = 010e11
+        pmalloc_free = 010dc0
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-        `_StringLiteral_[110,111,100,101,32,61,32,37,112,13]` in (obj/pmalloc.o unit 1 section index 45)
-        `_StringLiteral_[112,116,114,32,32,61,32,37,112,13]` in (obj/pmalloc.o unit 1 section index 47)
+        `_StringLiteral_[110,111,100,101,32,61,32,37,112,13]` in (obj/pmalloc.o unit 1 section index 44)
+        `_StringLiteral_[112,116,114,32,32,61,32,37,112,13]` in (obj/pmalloc.o unit 1 section index 46)
         pmalloc_item_insert in (obj/pmalloc.o unit 1 section index 12)
         pmalloc_item_remove in (obj/pmalloc.o unit 1 section index 13)
         pmalloc_merge in (obj/pmalloc.o unit 1 section index 6)
@@ -1441,10 +1424,10 @@ pmalloc_free in section 'farcode'
         main (obj/example_basic.o unit 0 section index 2)
 
 __lib_rdflush in section 'farcode'
- placed at address 010e9f-010f48 of size 0000aa
+ placed at address 010e52-010efb of size 0000aa
 (lib_rdflush.o (from clib-lc-ld-foenix.a) unit 41 section index 2)
     Defines:
-        __lib_rdflush = 010e9f
+        __lib_rdflush = 010e52
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         errno in (errno.o (from clib-lc-ld-foenix.a) unit 20 section index 2)
@@ -1453,21 +1436,21 @@ __lib_rdflush in section 'farcode'
         __lib_fwrite (lib_libfwrite.o (from clib-lc-ld-foenix.a) unit 40 section index 2)
         fseek (lib_fseek.o (from clib-lc-ld-foenix.a) unit 42 section index 2)
 
-_UDiv64 in section 'farcode'  placed at address 010f49-010ffa of size 0000b2
+_UDiv64 in section 'farcode'  placed at address 010efc-010fad of size 0000b2
 (integer.o (from clib-lc-ld-foenix.a) unit 49 section index 15)
     Defines:
-        _UMod64 = 010f4c
-        _UDiv64 = 010f49
+        _UMod64 = 010eff
+        _UDiv64 = 010efc
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
     Referenced from:
         __ultoa_invert (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 4)
 
 pmalloc_item_insert in section 'farcode'
- placed at address 010ffb-0110bd of size 0000c3
+ placed at address 010fae-011070 of size 0000c3
 (obj/pmalloc.o unit 1 section index 12)
     Defines:
-        pmalloc_item_insert = 010ffb
+        pmalloc_item_insert = 010fae
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
     Referenced from:
@@ -1475,19 +1458,19 @@ pmalloc_item_insert in section 'farcode'
         pmalloc_malloc (obj/pmalloc.o unit 1 section index 4)
         pmalloc_free (obj/pmalloc.o unit 1 section index 5)
 
-memcpy_dma in section 'farcode'  placed at address 0110be-011186 of size 0000c9
+memcpy_dma in section 'farcode'  placed at address 011071-011139 of size 0000c9
 (memcpy_dma.o (from c256-lc-ld-foenix.a) unit 55 section index 2)
     Defines:
-        memcpy_dma = 0110be
+        memcpy_dma = 011071
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
     Referenced from:
         memcpy (vram_copy.o (from c256-lc-ld-foenix.a) unit 53 section index 2)
 
-memset_dma in section 'farcode'  placed at address 011187-011257 of size 0000d1
+memset_dma in section 'farcode'  placed at address 01113a-01120a of size 0000d1
 (memset_dma.o (from c256-lc-ld-foenix.a) unit 26 section index 2)
     Defines:
-        memset_dma = 011187
+        memset_dma = 01113a
     References:
         DMA_wait_delay in (dma.o (from c256-lc-ld-foenix.a) unit 27 section index 2)
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
@@ -1495,10 +1478,10 @@ memset_dma in section 'farcode'  placed at address 011187-011257 of size 0000d1
         memset (vram_fill.o (from c256-lc-ld-foenix.a) unit 24 section index 2)
 
 __addfreechunk in section 'farcode'
- placed at address 011258-011338 of size 0000e1
+ placed at address 01120b-0112eb of size 0000e1
 (addfreechunk.o (from clib-lc-ld-foenix.a) unit 22 section index 3)
     Defines:
-        __addfreechunk = 011258
+        __addfreechunk = 01120b
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __size2ndx in (addfreechunk.o (from clib-lc-ld-foenix.a) unit 22 section index 2)
@@ -1507,10 +1490,10 @@ __addfreechunk in section 'farcode'
         __heap_addregion (heap_initialize.o (from clib-lc-ld-foenix.a) unit 23 section index 2)
 
 __heap_addregion in section 'farcode'
- placed at address 011339-01141e of size 0000e6
+ placed at address 0112ec-0113d1 of size 0000e6
 (heap_initialize.o (from clib-lc-ld-foenix.a) unit 23 section index 2)
     Defines:
-        __heap_addregion = 011339
+        __heap_addregion = 0112ec
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __addfreechunk in (addfreechunk.o (from clib-lc-ld-foenix.a) unit 22 section index 3)
@@ -1518,10 +1501,10 @@ __heap_addregion in section 'farcode'
         __heap_initialize (heap_initialize.o (from clib-lc-ld-foenix.a) unit 23 section index 3)
 
 __heap_initialize in section 'farcode'
- placed at address 01141f-011532 of size 000114
+ placed at address 0113d2-0114e5 of size 000114
 (heap_initialize.o (from clib-lc-ld-foenix.a) unit 23 section index 3)
     Defines:
-        __heap_initialize = 01141f
+        __heap_initialize = 0113d2
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __heap_addregion in (heap_initialize.o (from clib-lc-ld-foenix.a) unit 23 section index 2)
@@ -1529,11 +1512,24 @@ __heap_initialize in section 'farcode'
     Referenced from:
         __call_heap_initialize (Foenix-startup.o (from c256-lc-ld-foenix.a) unit 4 section index 5)
 
+pmalloc_malloc in section 'farcode'
+ placed at address 0114e6-011606 of size 000121
+(obj/pmalloc.o unit 1 section index 4)
+    Defines:
+        pmalloc_malloc = 0114e6
+    References:
+        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
+        pmalloc_item_insert in (obj/pmalloc.o unit 1 section index 12)
+        pmalloc_item_remove in (obj/pmalloc.o unit 1 section index 13)
+        pmalloc_merge in (obj/pmalloc.o unit 1 section index 6)
+    Referenced from:
+        main (obj/example_basic.o unit 0 section index 2)
+
 pmalloc_merge in section 'farcode'
- placed at address 011533-01165d of size 00012b
+ placed at address 011607-011732 of size 00012c
 (obj/pmalloc.o unit 1 section index 6)
     Defines:
-        pmalloc_merge = 011533
+        pmalloc_merge = 011607
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         pmalloc_item_remove in (obj/pmalloc.o unit 1 section index 13)
@@ -1542,10 +1538,10 @@ pmalloc_merge in section 'farcode'
         pmalloc_free (obj/pmalloc.o unit 1 section index 5)
 
 __ultoa_invert in section 'farcode'
- placed at address 01165e-011789 of size 00012c
+ placed at address 011733-01185e of size 00012c
 (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 4)
     Defines:
-        __ultoa_invert = 01165e
+        __ultoa_invert = 011733
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         _UDiv64 in (integer.o (from clib-lc-ld-foenix.a) unit 49 section index 15)
@@ -1554,10 +1550,10 @@ __ultoa_invert in section 'farcode'
         (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 5)
 
 __lib_fflush in section 'farcode'
- placed at address 01178a-0118e4 of size 00015b
+ placed at address 01185f-0119b9 of size 00015b
 (lib_libfflush.o (from clib-lc-ld-foenix.a) unit 37 section index 2)
     Defines:
-        __lib_fflush = 01178a
+        __lib_fflush = 01185f
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         _Stub_write in (stub_write.o (from c256-lc-ld-foenix.a) unit 38 section index 2)
@@ -1568,10 +1564,10 @@ __lib_fflush in section 'farcode'
         __lib_wrflush (lib_wrflush.o (from clib-lc-ld-foenix.a) unit 45 section index 2)
         fflush (lib_fflush.o (from clib-lc-ld-foenix.a) unit 46 section index 2)
 
-free in section 'farcode'  placed at address 0118e5-011a44 of size 000160
+free in section 'farcode'  placed at address 0119ba-011b19 of size 000160
 (free.o (from clib-lc-ld-foenix.a) unit 21 section index 2)
     Defines:
-        free = 0118e5
+        free = 0119ba
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __addfreechunk in (addfreechunk.o (from clib-lc-ld-foenix.a) unit 22 section index 3)
@@ -1579,26 +1575,12 @@ free in section 'farcode'  placed at address 0118e5-011a44 of size 000160
     Referenced from:
         fclose (lib_fclose.o (from clib-lc-ld-foenix.a) unit 19 section index 3)
 
-pmalloc_malloc in section 'farcode'
- placed at address 011a45-011ba5 of size 000161
-(obj/pmalloc.o unit 1 section index 4)
-    Defines:
-        pmalloc_malloc = 011a45
-    References:
-        _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-        pmalloc_item_insert in (obj/pmalloc.o unit 1 section index 12)
-        pmalloc_item_remove in (obj/pmalloc.o unit 1 section index 13)
-        pmalloc_merge in (obj/pmalloc.o unit 1 section index 6)
-    Referenced from:
-        main (obj/example_basic.o unit 0 section index 2)
-
-main in section 'farcode'  placed at address 011ba6-011d2c of size 000187
+main in section 'farcode'  placed at address 011b1a-011c9a of size 000181
 (obj/example_basic.o unit 0 section index 2)
     Defines:
-        main = 011ba6
+        main = 011b1a
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-        _FillDP4 in (spill.o (from clib-lc-ld-foenix.a) unit 48 section index 4)
         _Mul32 in (integer.o (from clib-lc-ld-foenix.a) unit 49 section index 3)
         `_StringLiteral_[112,109,97,108,108,111,99,58,32,66,97,115,105,99,32,69,120,97,109,112,108,101,13,13]` in (obj/example_basic.o unit 0 section index 7)
         `_StringLiteral_[65,108,108,111,99,97,116,105,110,103,32,37,108,117,32,98,121,116,101,115,46,46,46,13]` in (obj/example_basic.o unit 0 section index 4)
@@ -1612,10 +1594,10 @@ main in section 'farcode'  placed at address 011ba6-011d2c of size 000187
     Referenced from:
         (Foenix-startup.o (from c256-lc-ld-foenix.a) unit 4 section index 6)
 
-fclose in section 'farcode'  placed at address 011d2d-011eeb of size 0001bf
+fclose in section 'farcode'  placed at address 011c9b-011e59 of size 0001bf
 (lib_fclose.o (from clib-lc-ld-foenix.a) unit 19 section index 3)
     Defines:
-        fclose = 011d2d
+        fclose = 011c9b
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         __close in (lib_fclose.o (from clib-lc-ld-foenix.a) unit 19 section index 2)
@@ -1625,10 +1607,10 @@ fclose in section 'farcode'  placed at address 011d2d-011eeb of size 0001bf
         free in (free.o (from clib-lc-ld-foenix.a) unit 21 section index 2)
 
 __lib_fwrite in section 'farcode'
- placed at address 011eec-0120b0 of size 0001c5
+ placed at address 011e5a-01201e of size 0001c5
 (lib_libfwrite.o (from clib-lc-ld-foenix.a) unit 40 section index 2)
     Defines:
-        __lib_fwrite = 011eec
+        __lib_fwrite = 011e5a
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
         _Stub_write in (stub_write.o (from c256-lc-ld-foenix.a) unit 38 section index 2)
@@ -1639,25 +1621,25 @@ __lib_fwrite in section 'farcode'
         fputc (lib_fputc.o (from clib-lc-ld-foenix.a) unit 36 section index 2)
 
 pmalloc_dump_stats in section 'farcode'
- placed at address 0120b1-01235d of size 0002ad
+ placed at address 01201f-0122ad of size 00028f
 (obj/pmalloc.o unit 1 section index 14)
     Defines:
-        pmalloc_dump_stats = 0120b1
+        pmalloc_dump_stats = 01201f
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
-        `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]` in (obj/pmalloc.o unit 1 section index 37)
-        `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]` in (obj/pmalloc.o unit 1 section index 38)
-        `_StringLiteral_[32,45,32,102,114,101,101,109,101,109,58,32,37,108,117,13]` in (obj/pmalloc.o unit 1 section index 41)
-        `_StringLiteral_[32,45,32,116,111,116,97,108,109,101,109,58,32,37,108,117,13]` in (obj/pmalloc.o unit 1 section index 42)
-        `_StringLiteral_[32,45,32,116,111,116,97,108,110,111,100,101,115,58,32,37,108,117,32,40,115,105,122,101,111,102,32,37,100,41,13]` in (obj/pmalloc.o unit 1 section index 43)
-        `_StringLiteral_[32,45,32,97,115,115,105,103,110,101,100,58,13]` in (obj/pmalloc.o unit 1 section index 39)
-        `_StringLiteral_[32,45,32,97,118,97,105,108,97,98,108,101,58,13]` in (obj/pmalloc.o unit 1 section index 40)
-        `_StringLiteral_[45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,13]` in (obj/pmalloc.o unit 1 section index 44)
+        `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]` in (obj/pmalloc.o unit 1 section index 36)
+        `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]` in (obj/pmalloc.o unit 1 section index 37)
+        `_StringLiteral_[32,45,32,102,114,101,101,109,101,109,58,32,37,108,117,13]` in (obj/pmalloc.o unit 1 section index 40)
+        `_StringLiteral_[32,45,32,116,111,116,97,108,109,101,109,58,32,37,108,117,13]` in (obj/pmalloc.o unit 1 section index 41)
+        `_StringLiteral_[32,45,32,116,111,116,97,108,110,111,100,101,115,58,32,37,108,117,32,40,115,105,122,101,111,102,32,37,100,41,13]` in (obj/pmalloc.o unit 1 section index 42)
+        `_StringLiteral_[32,45,32,97,115,115,105,103,110,101,100,58,13]` in (obj/pmalloc.o unit 1 section index 38)
+        `_StringLiteral_[32,45,32,97,118,97,105,108,97,98,108,101,58,13]` in (obj/pmalloc.o unit 1 section index 39)
+        `_StringLiteral_[45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,13]` in (obj/pmalloc.o unit 1 section index 43)
         printf in (lib_printf.o (from clib-lc-ld-foenix.a) unit 28 section index 2)
     Referenced from:
         (obj/example_basic.o unit 0 section index 3)
 
-`?L167` in section 'farcode'  placed at address 01235e-0132ea of size 000f8d
+`?L167` in section 'farcode'  placed at address 0122ae-01323a of size 000f8d
 (__vsprintf_nofloat.o (from clib-lc-ld-foenix.a) unit 31 section index 5)
     References:
         _Dp in (pseudoRegisters.o (from clib-lc-ld-foenix.a) unit 6 section index 2)
@@ -1738,10 +1720,7 @@ _Dp in section 'registers'  placed at address 002100-002113 of size 000014
         pmalloc_free (obj/pmalloc.o unit 1 section index 5)
         pmalloc_merge (obj/pmalloc.o unit 1 section index 6)
         pmalloc_sizeof (obj/pmalloc.o unit 1 section index 7)
-        ... 83 more
-
-_FillInd in section 'registers'  placed at address 002114-002116 of size 000003
-(spill.o (from clib-lc-ld-foenix.a) unit 48 section index 2)
+        ... 81 more
 
 ##########################
 #                        #
@@ -1749,6 +1728,6 @@ _FillInd in section 'registers'  placed at address 002114-002116 of size 000003
 #                        #
 ##########################
 
-Executable       (Text): 12752 bytes
+Executable       (Text): 12576 bytes
 Data                   :   387 bytes
-Non-initialized        :  4119 bytes
+Non-initialized        :  4116 bytes

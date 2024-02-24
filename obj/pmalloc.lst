@@ -1,7 +1,7 @@
 ###############################################################################
 #                                                                             #
 # Calypsi ISO C compiler for 65816                                version 5.2 #
-#                                                       24/Feb/2024  15:50:27 #
+#                                                       24/Feb/2024  16:03:27 #
 # Command line: --core=65816 --code-model=large --data-model=large -D DEBUG   #
 #               --target=Foenix -O2 --speed --list-file=obj/pmalloc.lst       #
 #               -I/c/Program Files (x86)/Calypsi-65816/contrib/Foenix-SDK/include #
@@ -45,7 +45,7 @@
     \ 000000 d4..                 pei     dp:.tiny (_Dp+8)
     \ 000002 d4..                 pei     dp:.tiny (_Dp+10)
     \ 000004 a5..                 lda     dp:.tiny _Dp
-    \ 000006 22......             jsl     long:`?L164`
+    \ 000006 22......             jsl     long:`?L159`
 0021                  	#ifdef DEBUG
 0022                  		printf("pmalloc: DEBUG Enabled\r");
     \ 00000a a9....               lda     ##.word0 `_StringLiteral_[112,109,97,108,108,111,99,58,32,68,69,66,85,71,32,69,110,97,98,108,101,100,13]`
@@ -64,7 +64,7 @@
 0027                  	pm->freemem = 0;
 0028                  	pm->totalmem = 0;
 0029                  	pm->totalnodes = 0;
-    \ 000022 22......             jsl     long:`?L184`
+    \ 000022 22......             jsl     long:`?L177`
     \ 000026 a00800               ldy     ##8
     \ 000029 97..                 sta     [.tiny (_Dp+8)],y
     \ 00002b a00a00               ldy     ##10
@@ -97,38 +97,38 @@
     \ 000008 86..                 stx     dp:.tiny (_Dp+14)
     \ 00000a 85..                 sta     dp:.tiny (_Dp+12)
     \ 00000c a5..                 lda     dp:.tiny _Dp
-    \ 00000e 22......             jsl     long:`?L164`
+    \ 00000e 22......             jsl     long:`?L159`
 0034                  	// Get the usable size of the block
 0035                  	((pmalloc_item_t __far *)ptr)->size = size - sizeof(pmalloc_item_t);
-    \ 000012 a6..                 ldx     dp:.tiny (_Dp+14)
-    \ 000014 a5..                 lda     dp:.tiny (_Dp+12)
-    \ 000016 38                   sec
-    \ 000017 e90c00               sbc     ##12
-    \ 00001a b001                 bcs     `?L103`
-    \ 00001c ca                   dex
-    \ 00001d a00800   `?L103`:    ldy     ##8
-    \ 000020 97..                 sta     [.tiny (_Dp+4)],y
-    \ 000022 8a                   txa
-    \ 000023 a00a00               ldy     ##10
-    \ 000026 97..                 sta     [.tiny (_Dp+4)],y
+    \ 000012 a5..                 lda     dp:.tiny (_Dp+12)
+    \ 000014 38                   sec
+    \ 000015 e90a00               sbc     ##10
+    \ 000018 a00800               ldy     ##8
+    \ 00001b 97..                 sta     [.tiny (_Dp+4)],y
 0036                  
 0037                  	// Update freemem and totalmem
 0038                  	pm->freemem += ((pmalloc_item_t __far *)ptr)->size;
-    \ 000028 18                   clc
-    \ 000029 a00800               ldy     ##8
-    \ 00002c b7..                 lda     [.tiny (_Dp+8)],y
-    \ 00002e 77..                 adc     [.tiny (_Dp+4)],y
-    \ 000030 48                   pha
-    \ 000031 a00a00               ldy     ##10
-    \ 000034 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000036 77..                 adc     [.tiny (_Dp+4)],y
-    \ 000038 aa                   tax
-    \ 000039 68                   pla
+    \ 00001d a00a00               ldy     ##10
+    \ 000020 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 000022 aa                   tax
+    \ 000023 a00800               ldy     ##8
+    \ 000026 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 000028 da                   phx
+    \ 000029 48                   pha
+    \ 00002a b7..                 lda     [.tiny (_Dp+4)],y
+    \ 00002c 85..                 sta     dp:.tiny _Dp
+    \ 00002e 68                   pla
+    \ 00002f fa                   plx
+    \ 000030 18                   clc
+    \ 000031 65..                 adc     dp:.tiny _Dp
+    \ 000033 9001                 bcc     `?L103`
+    \ 000035 e8                   inx
+    \ 000036          `?L103`:
+    \ 000036 97..                 sta     [.tiny (_Dp+8)],y
+    \ 000038 8a                   txa
+    \ 000039 a00a00               ldy     ##10
+    \ 00003c 97..                 sta     [.tiny (_Dp+8)],y
 0039                  	pm->totalmem += pm->freemem;
-0040                  
-0041                  	// Add it to the available heap, update totalnodes
-0042                  	pmalloc_item_insert(&pm->available, ptr);
-    \ 00003a 22......             jsl     long:`?L181`
     \ 00003e 18                   clc
     \ 00003f a00c00               ldy     ##12
     \ 000042 b7..                 lda     [.tiny (_Dp+8)],y
@@ -146,6 +146,9 @@
     \ 00005b 8a                   txa
     \ 00005c a00e00               ldy     ##14
     \ 00005f 97..                 sta     [.tiny (_Dp+8)],y
+0040                  
+0041                  	// Add it to the available heap, update totalnodes
+0042                  	pmalloc_item_insert(&pm->available, ptr);
     \ 000061 a5..                 lda     dp:.tiny (_Dp+8)
     \ 000063 85..                 sta     dp:.tiny _Dp
     \ 000065 a5..                 lda     dp:.tiny (_Dp+10)
@@ -173,7 +176,7 @@
     \ 000088 84..                 sty     dp:.tiny (_Dp+12)
     \ 00008a 5c......             jmp     long:`?L3`
 0045                  
-0046                  void __far *pmalloc_malloc(pmalloc_t *pm, uint32_t size)
+0046                  void __far *pmalloc_malloc(pmalloc_t *pm, uint16_t size)
 0047                  {
     \ 000000                      .section farcode,text
     \ 000000                      .public pmalloc_malloc
@@ -185,215 +188,183 @@
     \ 000008 5a                   phy
     \ 000009 5a                   phy
     \ 00000a 5a                   phy
-    \ 00000b 5a                   phy
-    \ 00000c 8305                 sta     5,s
-    \ 00000e 8a                   txa
-    \ 00000f 8307                 sta     7,s
-    \ 000011 a5..                 lda     dp:.tiny _Dp
-    \ 000013 85..                 sta     dp:.tiny (_Dp+12)
-    \ 000015 a5..                 lda     dp:.tiny (_Dp+2)
-    \ 000017 85..                 sta     dp:.tiny (_Dp+14)
+    \ 00000b 8305                 sta     5,s
+    \ 00000d a5..                 lda     dp:.tiny _Dp
+    \ 00000f 85..                 sta     dp:.tiny (_Dp+12)
+    \ 000011 a5..                 lda     dp:.tiny (_Dp+2)
+    \ 000013 85..                 sta     dp:.tiny (_Dp+14)
 0048                  	// Find a suitable block
 0049                  	pmalloc_item_t __far *current = pm->available;
-    \ 000019 a00200               ldy     ##2
-    \ 00001c b7..                 lda     [.tiny (_Dp+12)],y
-    \ 00001e 85..                 sta     dp:.tiny (_Dp+10)
-    \ 000020 a7..                 lda     [.tiny (_Dp+12)]
-    \ 000022 85..                 sta     dp:.tiny (_Dp+8)
-    \ 000024          `?L10`:
+    \ 000015 a00200               ldy     ##2
+    \ 000018 b7..                 lda     [.tiny (_Dp+12)],y
+    \ 00001a 85..                 sta     dp:.tiny (_Dp+10)
+    \ 00001c a7..                 lda     [.tiny (_Dp+12)]
+    \ 00001e 85..                 sta     dp:.tiny (_Dp+8)
+    \ 000020          `?L10`:
 0050                  	while(current != NULL && current->size < size) current = current->next;
-    \ 000024 a5..                 lda     dp:.tiny (_Dp+8)
-    \ 000026 05..                 ora     dp:.tiny (_Dp+10)
-    \ 000028 f019                 beq     `?L11`
-    \ 00002a a00800               ldy     ##8
-    \ 00002d b7..                 lda     [.tiny (_Dp+8)],y
-    \ 00002f c305                 cmp     5,s
-    \ 000031 a00a00               ldy     ##10
-    \ 000034 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000036 e307                 sbc     7,s
-    \ 000038 b009                 bcs     `?L11`
-    \ 00003a a00600               ldy     ##6
-    \ 00003d 22......             jsl     long:`?L162`
-    \ 000041 80e1                 bra     `?L10`
-    \ 000043          `?L11`:
+    \ 000020 a5..                 lda     dp:.tiny (_Dp+8)
+    \ 000022 05..                 ora     dp:.tiny (_Dp+10)
+    \ 000024 f012                 beq     `?L11`
+    \ 000026 a00800               ldy     ##8
+    \ 000029 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 00002b c305                 cmp     5,s
+    \ 00002d b009                 bcs     `?L11`
+    \ 00002f a00600               ldy     ##6
+    \ 000032 22......             jsl     long:`?L157`
+    \ 000036 80e8                 bra     `?L10`
+    \ 000038          `?L11`:
 0051                  
 0052                  	// If there's nothing suitable, we're either out of memory or fragged.
 0053                  	if(current == NULL) return NULL;
-    \ 000043 a5..                 lda     dp:.tiny (_Dp+8)
-    \ 000045 05..                 ora     dp:.tiny (_Dp+10)
-    \ 000047 d007                 bne     `?L14`
-    \ 000049 a90000               lda     ##0
-    \ 00004c aa                   tax
-    \ 00004d 4c....               jmp     .kbank `?L9`
-    \ 000050          `?L14`:
+    \ 000038 a5..                 lda     dp:.tiny (_Dp+8)
+    \ 00003a 05..                 ora     dp:.tiny (_Dp+10)
+    \ 00003c d007                 bne     `?L14`
+    \ 00003e a90000               lda     ##0
+    \ 000041 aa                   tax
+    \ 000042 4c....               jmp     .kbank `?L9`
+    \ 000045          `?L14`:
 0054                  
 0055                  	// Remove it from pm->available
 0056                  	pmalloc_item_remove(&pm->available, current);
-    \ 000050 22......             jsl     long:`?L161`
-    \ 000054 22......             jsl     long:pmalloc_item_remove
+    \ 000045 22......             jsl     long:`?L156`
+    \ 000049 22......             jsl     long:pmalloc_item_remove
 0057                  
 0058                  	// Add to pm->assigned
 0059                  	pmalloc_item_insert(&pm->assigned, current);
-    \ 000058 22......             jsl     long:`?L161`
-    \ 00005c 18                   clc
-    \ 00005d a5..                 lda     dp:.tiny _Dp
-    \ 00005f 690400               adc     ##4
-    \ 000062 85..                 sta     dp:.tiny _Dp
-    \ 000064 22......             jsl     long:pmalloc_item_insert
+    \ 00004d 22......             jsl     long:`?L156`
+    \ 000051 18                   clc
+    \ 000052 a5..                 lda     dp:.tiny _Dp
+    \ 000054 690400               adc     ##4
+    \ 000057 85..                 sta     dp:.tiny _Dp
+    \ 000059 22......             jsl     long:pmalloc_item_insert
 0060                  
 0061                  	// If it's not the exact size..
 0062                  	if(current->size != size) {
-    \ 000068 a00800               ldy     ##8
-    \ 00006b b7..                 lda     [.tiny (_Dp+8)],y
-    \ 00006d c305                 cmp     5,s
-    \ 00006f d00c                 bne     `?L19`
-    \ 000071 a00a00               ldy     ##10
-    \ 000074 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000076 c307                 cmp     7,s
-    \ 000078 d003                 bne     `?L242`
-    \ 00007a 4c....               jmp     .kbank `?L18`
-    \ 00007d          `?L242`:
-    \ 00007d          `?L19`:
+    \ 00005d a00800               ldy     ##8
+    \ 000060 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 000062 c305                 cmp     5,s
+    \ 000064 d003                 bne     `?L232`
+    \ 000066 4c....               jmp     .kbank `?L18`
+    \ 000069          `?L232`:
 0063                  		// Add a free block that's the remainder size
 0064                  		pmalloc_item_t __far *newfree = (pmalloc_item_t __far *)((char __far *)current + sizeof(pmalloc_item_t) + size);
+    \ 000069 a6..                 ldx     dp:.tiny (_Dp+10)
+    \ 00006b a5..                 lda     dp:.tiny (_Dp+8)
+    \ 00006d 18                   clc
+    \ 00006e 690a00               adc     ##10
+    \ 000071 18                   clc
+    \ 000072 6305                 adc     5,s
+    \ 000074 8301                 sta     1,s
+    \ 000076 8a                   txa
+    \ 000077 8303                 sta     3,s
 0065                  		newfree->size = current->size - sizeof(pmalloc_item_t) - size;
-    \ 00007d 22......             jsl     long:`?L172`
-    \ 000081 6305                 adc     5,s
-    \ 000083 85..                 sta     dp:.tiny _Dp
-    \ 000085 8301                 sta     1,s
-    \ 000087 a5..                 lda     dp:.tiny (_Dp+2)
-    \ 000089 8303                 sta     3,s
-    \ 00008b 22......             jsl     long:`?L165`
-    \ 00008f 38                   sec
-    \ 000090 e90c00               sbc     ##12
-    \ 000093 b001                 bcs     `?L111`
-    \ 000095 ca                   dex
-    \ 000096          `?L111`:
-    \ 000096 86..                 stx     dp:.tiny (_Dp+2)
-    \ 000098 85..                 sta     dp:.tiny _Dp
-    \ 00009a a6..                 ldx     dp:.tiny (_Dp+2)
-    \ 00009c a5..                 lda     dp:.tiny _Dp
-    \ 00009e 38                   sec
-    \ 00009f e305                 sbc     5,s
-    \ 0000a1 48                   pha
-    \ 0000a2 8a                   txa
-    \ 0000a3 e309                 sbc     9,s
-    \ 0000a5 aa                   tax
-    \ 0000a6 68                   pla
-    \ 0000a7 da                   phx
-    \ 0000a8 48                   pha
-    \ 0000a9 a307                 lda     7,s
-    \ 0000ab 85..                 sta     dp:.tiny (_Dp+2)
-    \ 0000ad a305                 lda     5,s
-    \ 0000af 85..                 sta     dp:.tiny _Dp
-    \ 0000b1 68                   pla
-    \ 0000b2 fa                   plx
-    \ 0000b3 97..                 sta     [.tiny _Dp],y
-    \ 0000b5 8a                   txa
-    \ 0000b6 a00a00               ldy     ##10
-    \ 0000b9 97..                 sta     [.tiny _Dp],y
+    \ 000079 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 00007b 38                   sec
+    \ 00007c e90a00               sbc     ##10
+    \ 00007f 38                   sec
+    \ 000080 e305                 sbc     5,s
+    \ 000082 48                   pha
+    \ 000083 a305                 lda     5,s
+    \ 000085 85..                 sta     dp:.tiny (_Dp+2)
+    \ 000087 a303                 lda     3,s
+    \ 000089 85..                 sta     dp:.tiny _Dp
+    \ 00008b 68                   pla
+    \ 00008c 97..                 sta     [.tiny _Dp],y
 0066                  		newfree->next = current->next;
-    \ 0000bb a303                 lda     3,s
-    \ 0000bd 85..                 sta     dp:.tiny (_Dp+2)
-    \ 0000bf a301                 lda     1,s
-    \ 0000c1 85..                 sta     dp:.tiny _Dp
-    \ 0000c3 a00400               ldy     ##4
-    \ 0000c6 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 0000c8 97..                 sta     [.tiny _Dp],y
-    \ 0000ca a00600               ldy     ##6
-    \ 0000cd b7..                 lda     [.tiny (_Dp+8)],y
-    \ 0000cf 97..                 sta     [.tiny _Dp],y
+    \ 00008e a303                 lda     3,s
+    \ 000090 85..                 sta     dp:.tiny (_Dp+2)
+    \ 000092 a301                 lda     1,s
+    \ 000094 85..                 sta     dp:.tiny _Dp
+    \ 000096 a00400               ldy     ##4
+    \ 000099 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 00009b 97..                 sta     [.tiny _Dp],y
+    \ 00009d a00600               ldy     ##6
+    \ 0000a0 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 0000a2 97..                 sta     [.tiny _Dp],y
 0067                  		current->next = NULL;
-    \ 0000d1 a90000               lda     ##0
+    \ 0000a4 a90000               lda     ##0
 0068                  		
 0069                  		// Change pm->assigned size
 0070                  		current->size = size;
 0071                  		pmalloc_item_insert(&pm->available, newfree);
-    \ 0000d4 22......             jsl     long:`?L184`
-    \ 0000d8 a305                 lda     5,s
-    \ 0000da a00800               ldy     ##8
-    \ 0000dd 97..                 sta     [.tiny (_Dp+8)],y
-    \ 0000df a307                 lda     7,s
-    \ 0000e1 a00a00               ldy     ##10
-    \ 0000e4 97..                 sta     [.tiny (_Dp+8)],y
-    \ 0000e6 a303                 lda     3,s
-    \ 0000e8 85..                 sta     dp:.tiny (_Dp+6)
-    \ 0000ea a301                 lda     1,s
-    \ 0000ec 85..                 sta     dp:.tiny (_Dp+4)
-    \ 0000ee a5..                 lda     dp:.tiny (_Dp+12)
-    \ 0000f0 85..                 sta     dp:.tiny _Dp
-    \ 0000f2 a5..                 lda     dp:.tiny (_Dp+14)
-    \ 0000f4 85..                 sta     dp:.tiny (_Dp+2)
-    \ 0000f6 22......             jsl     long:pmalloc_item_insert
+    \ 0000a7 22......             jsl     long:`?L177`
+    \ 0000ab a305                 lda     5,s
+    \ 0000ad a00800               ldy     ##8
+    \ 0000b0 97..                 sta     [.tiny (_Dp+8)],y
+    \ 0000b2 22......             jsl     long:`?L178`
+    \ 0000b6 85..                 sta     dp:.tiny _Dp
+    \ 0000b8 a5..                 lda     dp:.tiny (_Dp+14)
+    \ 0000ba 85..                 sta     dp:.tiny (_Dp+2)
+    \ 0000bc 22......             jsl     long:pmalloc_item_insert
 0072                  
 0073                  		// We've lost a bit of overhead making the new node
 0074                  		pm->freemem -= sizeof(pmalloc_item_t);
-    \ 0000fa a00a00               ldy     ##10
-    \ 0000fd b7..                 lda     [.tiny (_Dp+12)],y
-    \ 0000ff aa                   tax
-    \ 000100 a00800               ldy     ##8
-    \ 000103 b7..                 lda     [.tiny (_Dp+12)],y
-    \ 000105 38                   sec
-    \ 000106 e90c00               sbc     ##12
-    \ 000109 b001                 bcs     `?L114`
-    \ 00010b ca                   dex
-    \ 00010c          `?L114`:
-    \ 00010c 97..                 sta     [.tiny (_Dp+12)],y
-    \ 00010e 8a                   txa
-    \ 00010f a00a00               ldy     ##10
-    \ 000112 97..                 sta     [.tiny (_Dp+12)],y
+    \ 0000c0 22......             jsl     long:`?L166`
+    \ 0000c4 38                   sec
+    \ 0000c5 e90a00               sbc     ##10
+    \ 0000c8 b001                 bcs     `?L111`
+    \ 0000ca ca                   dex
+    \ 0000cb          `?L111`:
+    \ 0000cb 97..                 sta     [.tiny (_Dp+12)],y
+    \ 0000cd 8a                   txa
+    \ 0000ce a00a00               ldy     ##10
+    \ 0000d1 97..                 sta     [.tiny (_Dp+12)],y
 0075                  		pm->totalnodes++;
-    \ 000114 a01200               ldy     ##18
-    \ 000117 b7..                 lda     [.tiny (_Dp+12)],y
-    \ 000119 aa                   tax
-    \ 00011a a01000               ldy     ##16
-    \ 00011d b7..                 lda     [.tiny (_Dp+12)],y
-    \ 00011f 1a                   inc     a
-    \ 000120 d001                 bne     `?L116`
-    \ 000122 e8                   inx
-    \ 000123          `?L116`:
-    \ 000123 97..                 sta     [.tiny (_Dp+12)],y
-    \ 000125 8a                   txa
-    \ 000126 a01200               ldy     ##18
-    \ 000129 97..                 sta     [.tiny (_Dp+12)],y
+    \ 0000d3 a01200               ldy     ##18
+    \ 0000d6 b7..                 lda     [.tiny (_Dp+12)],y
+    \ 0000d8 aa                   tax
+    \ 0000d9 a01000               ldy     ##16
+    \ 0000dc b7..                 lda     [.tiny (_Dp+12)],y
+    \ 0000de 1a                   inc     a
+    \ 0000df d001                 bne     `?L113`
+    \ 0000e1 e8                   inx
+    \ 0000e2          `?L113`:
+    \ 0000e2 97..                 sta     [.tiny (_Dp+12)],y
+    \ 0000e4 8a                   txa
+    \ 0000e5 a01200               ldy     ##18
+    \ 0000e8 97..                 sta     [.tiny (_Dp+12)],y
 0076                  
 0077                  		// Merge around newfree
 0078                  		pmalloc_merge(pm, newfree);
-    \ 00012b a303                 lda     3,s
-    \ 00012d 85..                 sta     dp:.tiny (_Dp+6)
-    \ 00012f a301                 lda     1,s
-    \ 000131 85..                 sta     dp:.tiny (_Dp+4)
-    \ 000133 a5..                 lda     dp:.tiny (_Dp+12)
-    \ 000135 85..                 sta     dp:.tiny _Dp
-    \ 000137 a5..                 lda     dp:.tiny (_Dp+14)
-    \ 000139 85..                 sta     dp:.tiny (_Dp+2)
-    \ 00013b 22......             jsl     long:pmalloc_merge
-    \ 00013f          `?L18`:
+    \ 0000ea 22......             jsl     long:`?L178`
+    \ 0000ee 85..                 sta     dp:.tiny _Dp
+    \ 0000f0 a5..                 lda     dp:.tiny (_Dp+14)
+    \ 0000f2 85..                 sta     dp:.tiny (_Dp+2)
+    \ 0000f4 22......             jsl     long:pmalloc_merge
+    \ 0000f8          `?L18`:
 0079                  	}
 0080                  
 0081                  	// Reduce the amount of free memory
 0082                  	pm->freemem -= current->size;
-    \ 00013f 38                   sec
-    \ 000140 a00800               ldy     ##8
-    \ 000143 b7..                 lda     [.tiny (_Dp+12)],y
-    \ 000145 f7..                 sbc     [.tiny (_Dp+8)],y
-    \ 000147 48                   pha
-    \ 000148 a00a00               ldy     ##10
-    \ 00014b b7..                 lda     [.tiny (_Dp+12)],y
-    \ 00014d f7..                 sbc     [.tiny (_Dp+8)],y
-    \ 00014f aa                   tax
-    \ 000150 68                   pla
+    \ 0000f8 22......             jsl     long:`?L166`
+    \ 0000fc da                   phx
+    \ 0000fd 48                   pha
+    \ 0000fe b7..                 lda     [.tiny (_Dp+8)],y
+    \ 000100 85..                 sta     dp:.tiny _Dp
+    \ 000102 68                   pla
+    \ 000103 fa                   plx
+    \ 000104 38                   sec
+    \ 000105 e5..                 sbc     dp:.tiny _Dp
+    \ 000107 b001                 bcs     `?L116`
+    \ 000109 ca                   dex
+    \ 00010a          `?L116`:
+    \ 00010a 97..                 sta     [.tiny (_Dp+12)],y
+    \ 00010c 8a                   txa
+    \ 00010d a00a00               ldy     ##10
+    \ 000110 97..                 sta     [.tiny (_Dp+12)],y
 0083                  
 0084                  	// Return the user memory
 0085                  	return ((char __far *)current) + sizeof(pmalloc_item_t);
-    \ 000151 22......             jsl     long:`?L180`
-    \ 000155 a6..                 ldx     dp:.tiny (_Dp+10)
-    \ 000157 a5..                 lda     dp:.tiny (_Dp+8)
-    \ 000159 18                   clc
-    \ 00015a 690c00               adc     ##12
-    \ 00015d          `?L9`:
+    \ 000112 a6..                 ldx     dp:.tiny (_Dp+10)
+    \ 000114 a5..                 lda     dp:.tiny (_Dp+8)
+    \ 000116 18                   clc
+    \ 000117 690a00               adc     ##10
+    \ 00011a          `?L9`:
 0086                  }
-    \ 00015d 5c......             jmp     long:`?L30`
+    \ 00011a 7a                   ply
+    \ 00011b 7a                   ply
+    \ 00011c 7a                   ply
+    \ 00011d 5c......             jmp     long:`?L6`
 0087                  
 0088                  void pmalloc_free(pmalloc_t *pm, void __far *ptr)
 0089                  {
@@ -413,7 +384,7 @@
 0091                  	if(ptr == NULL) return;
     \ 000011 a5..                 lda     dp:.tiny (_Dp+4)
     \ 000013 05..                 ora     dp:.tiny (_Dp+6)
-    \ 000015 f072                 beq     `?L23`
+    \ 000015 f076                 beq     `?L23`
 0092                  
 0093                  	// Get the node of this memory
 0094                  	pmalloc_item_t __far *node = (pmalloc_item_t __far *)(((char __far *)ptr) - sizeof(pmalloc_item_t));
@@ -423,7 +394,7 @@
     \ 00001d 85..                 sta     dp:.tiny (_Dp+10)
     \ 00001f 38                   sec
     \ 000020 a5..                 lda     dp:.tiny (_Dp+8)
-    \ 000022 e90c00               sbc     ##12
+    \ 000022 e90a00               sbc     ##10
     \ 000025 85..                 sta     dp:.tiny (_Dp+8)
 0095                  	#ifdef DEBUG
 0096                  	printf("ptr  = %p\r", ptr);
@@ -434,7 +405,7 @@
     \ 00002d a9....               lda     ##.word0 `_StringLiteral_[112,116,114,32,32,61,32,37,112,13]`
     \ 000030 85..                 sta     dp:.tiny _Dp
     \ 000032 a9....               lda     ##.word2 `_StringLiteral_[112,116,114,32,32,61,32,37,112,13]`
-    \ 000035 22......             jsl     long:`?L174`
+    \ 000035 22......             jsl     long:`?L167`
     \ 000039 8305                 sta     5,s
 0097                  	printf("node = %p\r", node);
     \ 00003b 68                   pla
@@ -446,7 +417,7 @@
     \ 000043 a9....               lda     ##.word0 `_StringLiteral_[110,111,100,101,32,61,32,37,112,13]`
     \ 000046 85..                 sta     dp:.tiny _Dp
     \ 000048 a9....               lda     ##.word2 `_StringLiteral_[110,111,100,101,32,61,32,37,112,13]`
-    \ 00004b 22......             jsl     long:`?L174`
+    \ 00004b 22......             jsl     long:`?L167`
     \ 00004f 8305                 sta     5,s
 0098                  	#endif
 0099                  
@@ -454,7 +425,7 @@
 0101                  	pmalloc_item_remove(&pm->assigned, node);
     \ 000051 68                   pla
     \ 000052 68                   pla
-    \ 000053 22......             jsl     long:`?L161`
+    \ 000053 22......             jsl     long:`?L156`
     \ 000057 18                   clc
     \ 000058 a5..                 lda     dp:.tiny _Dp
     \ 00005a 690400               adc     ##4
@@ -462,31 +433,36 @@
     \ 00005f 22......             jsl     long:pmalloc_item_remove
 0102                  
 0103                  	pm->freemem += node->size;
-    \ 000063 18                   clc
-    \ 000064 a00800               ldy     ##8
-    \ 000067 b7..                 lda     [.tiny (_Dp+12)],y
-    \ 000069 77..                 adc     [.tiny (_Dp+8)],y
-    \ 00006b 48                   pha
-    \ 00006c a00a00               ldy     ##10
-    \ 00006f b7..                 lda     [.tiny (_Dp+12)],y
-    \ 000071 77..                 adc     [.tiny (_Dp+8)],y
-    \ 000073 aa                   tax
-    \ 000074 68                   pla
+    \ 000063 22......             jsl     long:`?L166`
+    \ 000067 da                   phx
+    \ 000068 48                   pha
+    \ 000069 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 00006b 85..                 sta     dp:.tiny _Dp
+    \ 00006d 68                   pla
+    \ 00006e fa                   plx
+    \ 00006f 18                   clc
+    \ 000070 65..                 adc     dp:.tiny _Dp
+    \ 000072 9001                 bcc     `?L121`
+    \ 000074 e8                   inx
+    \ 000075          `?L121`:
+    \ 000075 97..                 sta     [.tiny (_Dp+12)],y
+    \ 000077 8a                   txa
+    \ 000078 a00a00               ldy     ##10
+    \ 00007b 97..                 sta     [.tiny (_Dp+12)],y
 0104                  
 0105                  	// Add to pm->available
 0106                  	pmalloc_item_insert(&pm->available, node);
-    \ 000075 22......             jsl     long:`?L180`
-    \ 000079 22......             jsl     long:`?L161`
-    \ 00007d 22......             jsl     long:pmalloc_item_insert
+    \ 00007d 22......             jsl     long:`?L156`
+    \ 000081 22......             jsl     long:pmalloc_item_insert
 0107                  
 0108                  	// Merge around current
 0109                  	pmalloc_merge(pm, node);
-    \ 000081 22......             jsl     long:`?L161`
-    \ 000085 22......             jsl     long:pmalloc_merge
-    \ 000089          `?L23`:
+    \ 000085 22......             jsl     long:`?L156`
+    \ 000089 22......             jsl     long:pmalloc_merge
+    \ 00008d          `?L23`:
 0110                  }
-    \ 000089 7a                   ply
-    \ 00008a 5c......             jmp     long:`?L6`
+    \ 00008d 7a                   ply
+    \ 00008e 5c......             jmp     long:`?L6`
 0111                  
 0112                  void pmalloc_merge(pmalloc_t *pm, pmalloc_item_t __far *node) {
     \ 000000                      .section farcode,text
@@ -525,7 +501,7 @@
     \ 000033 85..                 sta     dp:.tiny _Dp
     \ 000035 18                   clc
     \ 000036 a5..                 lda     dp:.tiny _Dp
-    \ 000038 690c00               adc     ##12
+    \ 000038 690a00               adc     ##10
     \ 00003b 85..                 sta     dp:.tiny _Dp
     \ 00003d b7..                 lda     [.tiny (_Dp+8)],y
     \ 00003f 85..                 sta     dp:.tiny (_Dp+6)
@@ -546,117 +522,117 @@
     \ 00005c b7..                 lda     [.tiny (_Dp+8)],y
     \ 00005e 85..                 sta     dp:.tiny (_Dp+2)
     \ 000060 a7..                 lda     [.tiny (_Dp+8)]
-    \ 000062 22......             jsl     long:`?L163`
+    \ 000062 22......             jsl     long:`?L158`
     \ 000066 80bc                 bra     `?L31`
     \ 000068          `?L34`:
 0116                  
 0117                  	// Scan forward and merge free blocks
 0118                  	while (node->next == (pmalloc_item_t __far *)((char __far *)node + sizeof(pmalloc_item_t) + node->size)) {
-    \ 000068 22......             jsl     long:`?L172`
-    \ 00006c a00800               ldy     ##8
-    \ 00006f 77..                 adc     [.tiny (_Dp+8)],y
-    \ 000071 85..                 sta     dp:.tiny _Dp
-    \ 000073 a00400               ldy     ##4
-    \ 000076 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000078 c5..                 cmp     dp:.tiny _Dp
-    \ 00007a f003                 beq     `?L243`
-    \ 00007c 4c....               jmp     .kbank `?L30`
-    \ 00007f a00600   `?L243`:    ldy     ##6
-    \ 000082 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000084 c5..                 cmp     dp:.tiny (_Dp+2)
-    \ 000086 f003                 beq     `?L244`
-    \ 000088 4c....               jmp     .kbank `?L30`
-    \ 00008b          `?L244`:
+    \ 000068 a5..                 lda     dp:.tiny (_Dp+8)
+    \ 00006a 85..                 sta     dp:.tiny _Dp
+    \ 00006c a5..                 lda     dp:.tiny (_Dp+10)
+    \ 00006e 85..                 sta     dp:.tiny (_Dp+2)
+    \ 000070 18                   clc
+    \ 000071 a5..                 lda     dp:.tiny _Dp
+    \ 000073 690a00               adc     ##10
+    \ 000076 85..                 sta     dp:.tiny _Dp
+    \ 000078 18                   clc
+    \ 000079 a5..                 lda     dp:.tiny _Dp
+    \ 00007b a00800               ldy     ##8
+    \ 00007e 77..                 adc     [.tiny (_Dp+8)],y
+    \ 000080 85..                 sta     dp:.tiny _Dp
+    \ 000082 a00400               ldy     ##4
+    \ 000085 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 000087 c5..                 cmp     dp:.tiny _Dp
+    \ 000089 f003                 beq     `?L233`
+    \ 00008b 4c....               jmp     .kbank `?L30`
+    \ 00008e a00600   `?L233`:    ldy     ##6
+    \ 000091 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 000093 c5..                 cmp     dp:.tiny (_Dp+2)
+    \ 000095 f003                 beq     `?L234`
+    \ 000097 4c....               jmp     .kbank `?L30`
+    \ 00009a          `?L234`:
 0119                  		uint32_t nodesize = node->next->size + sizeof(pmalloc_item_t);
-    \ 00008b b7..                 lda     [.tiny (_Dp+8)],y
-    \ 00008d 85..                 sta     dp:.tiny (_Dp+2)
-    \ 00008f a00400               ldy     ##4
-    \ 000092 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000094 85..                 sta     dp:.tiny _Dp
-    \ 000096 22......             jsl     long:`?L173`
-    \ 00009a 18                   clc
-    \ 00009b 690c00               adc     ##12
-    \ 00009e 9001                 bcc     `?L126`
-    \ 0000a0 e8                   inx
-    \ 0000a1          `?L126`:
-    \ 0000a1 86..                 stx     dp:.tiny (_Dp+14)
-    \ 0000a3 85..                 sta     dp:.tiny (_Dp+12)
+    \ 00009a b7..                 lda     [.tiny (_Dp+8)],y
+    \ 00009c 85..                 sta     dp:.tiny (_Dp+2)
+    \ 00009e a00400               ldy     ##4
+    \ 0000a1 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 0000a3 85..                 sta     dp:.tiny _Dp
 0120                  		pm->freemem += sizeof(pmalloc_item_t);
-    \ 0000a5 a307                 lda     7,s
-    \ 0000a7 85..                 sta     dp:.tiny (_Dp+2)
-    \ 0000a9 a305                 lda     5,s
-    \ 0000ab 85..                 sta     dp:.tiny _Dp
-    \ 0000ad 22......             jsl     long:`?L173`
-    \ 0000b1 18                   clc
-    \ 0000b2 690c00               adc     ##12
-    \ 0000b5 9001                 bcc     `?L128`
-    \ 0000b7 e8                   inx
-    \ 0000b8 da       `?L128`:    phx
-    \ 0000b9 48                   pha
-    \ 0000ba a30b                 lda     11,s
-    \ 0000bc 85..                 sta     dp:.tiny (_Dp+2)
-    \ 0000be a309                 lda     9,s
-    \ 0000c0 85..                 sta     dp:.tiny _Dp
-    \ 0000c2 68                   pla
-    \ 0000c3 fa                   plx
-    \ 0000c4 97..                 sta     [.tiny _Dp],y
-    \ 0000c6 8a                   txa
-    \ 0000c7 a00a00               ldy     ##10
-    \ 0000ca 97..                 sta     [.tiny _Dp],y
+    \ 0000a5 22......             jsl     long:`?L175`
+    \ 0000a9 77..                 adc     [.tiny _Dp],y
+    \ 0000ab a20000               ldx     ##0
+    \ 0000ae 86..                 stx     dp:.tiny (_Dp+14)
+    \ 0000b0 85..                 sta     dp:.tiny (_Dp+12)
+    \ 0000b2 a307                 lda     7,s
+    \ 0000b4 85..                 sta     dp:.tiny (_Dp+2)
+    \ 0000b6 a305                 lda     5,s
+    \ 0000b8 85..                 sta     dp:.tiny _Dp
+    \ 0000ba 22......             jsl     long:`?L173`
+    \ 0000be 18                   clc
+    \ 0000bf 690a00               adc     ##10
+    \ 0000c2 9001                 bcc     `?L127`
+    \ 0000c4 e8                   inx
+    \ 0000c5 da       `?L127`:    phx
+    \ 0000c6 48                   pha
+    \ 0000c7 a30b                 lda     11,s
+    \ 0000c9 85..                 sta     dp:.tiny (_Dp+2)
+    \ 0000cb a309                 lda     9,s
+    \ 0000cd 85..                 sta     dp:.tiny _Dp
+    \ 0000cf 68                   pla
+    \ 0000d0 fa                   plx
+    \ 0000d1 97..                 sta     [.tiny _Dp],y
+    \ 0000d3 8a                   txa
+    \ 0000d4 a00a00               ldy     ##10
+    \ 0000d7 97..                 sta     [.tiny _Dp],y
 0121                  		pmalloc_item_remove(&pm->available, node->next);
-    \ 0000cc a00600               ldy     ##6
-    \ 0000cf b7..                 lda     [.tiny (_Dp+8)],y
-    \ 0000d1 85..                 sta     dp:.tiny (_Dp+6)
-    \ 0000d3 a00400               ldy     ##4
-    \ 0000d6 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 0000d8 85..                 sta     dp:.tiny (_Dp+4)
-    \ 0000da a307                 lda     7,s
-    \ 0000dc 85..                 sta     dp:.tiny (_Dp+2)
-    \ 0000de a305                 lda     5,s
-    \ 0000e0 85..                 sta     dp:.tiny _Dp
-    \ 0000e2 22......             jsl     long:pmalloc_item_remove
+    \ 0000d9 a00600               ldy     ##6
+    \ 0000dc b7..                 lda     [.tiny (_Dp+8)],y
+    \ 0000de 85..                 sta     dp:.tiny (_Dp+6)
+    \ 0000e0 a00400               ldy     ##4
+    \ 0000e3 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 0000e5 85..                 sta     dp:.tiny (_Dp+4)
+    \ 0000e7 a307                 lda     7,s
+    \ 0000e9 85..                 sta     dp:.tiny (_Dp+2)
+    \ 0000eb a305                 lda     5,s
+    \ 0000ed 85..                 sta     dp:.tiny _Dp
+    \ 0000ef 22......             jsl     long:pmalloc_item_remove
 0122                  		pm->totalnodes--;
-    \ 0000e6 a307                 lda     7,s
-    \ 0000e8 85..                 sta     dp:.tiny (_Dp+2)
-    \ 0000ea a305                 lda     5,s
-    \ 0000ec 85..                 sta     dp:.tiny _Dp
-    \ 0000ee 22......             jsl     long:`?L182`
-    \ 0000f2 d001                 bne     `?L131`
-    \ 0000f4 ca                   dex
-    \ 0000f5 3a       `?L131`:    dec     a
-    \ 0000f6 da                   phx
-    \ 0000f7 48                   pha
-    \ 0000f8 a30b                 lda     11,s
-    \ 0000fa 85..                 sta     dp:.tiny (_Dp+2)
-    \ 0000fc a309                 lda     9,s
-    \ 0000fe 85..                 sta     dp:.tiny _Dp
-    \ 000100 68                   pla
-    \ 000101 fa                   plx
-    \ 000102 97..                 sta     [.tiny _Dp],y
-    \ 000104 8a                   txa
-    \ 000105 a01200               ldy     ##18
-    \ 000108 97..                 sta     [.tiny _Dp],y
+    \ 0000f3 a307                 lda     7,s
+    \ 0000f5 85..                 sta     dp:.tiny (_Dp+2)
+    \ 0000f7 a305                 lda     5,s
+    \ 0000f9 85..                 sta     dp:.tiny _Dp
+    \ 0000fb 22......             jsl     long:`?L174`
+    \ 0000ff d001                 bne     `?L130`
+    \ 000101 ca                   dex
+    \ 000102 3a       `?L130`:    dec     a
+    \ 000103 da                   phx
+    \ 000104 48                   pha
+    \ 000105 a30b                 lda     11,s
+    \ 000107 85..                 sta     dp:.tiny (_Dp+2)
+    \ 000109 a309                 lda     9,s
+    \ 00010b 85..                 sta     dp:.tiny _Dp
+    \ 00010d 68                   pla
+    \ 00010e fa                   plx
+    \ 00010f 97..                 sta     [.tiny _Dp],y
+    \ 000111 8a                   txa
+    \ 000112 a01200               ldy     ##18
+    \ 000115 97..                 sta     [.tiny _Dp],y
 0123                  		node->size += nodesize;
-    \ 00010a 18                   clc
-    \ 00010b a00800               ldy     ##8
-    \ 00010e b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000110 65..                 adc     dp:.tiny (_Dp+12)
-    \ 000112 48                   pha
-    \ 000113 a00a00               ldy     ##10
-    \ 000116 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000118 65..                 adc     dp:.tiny (_Dp+14)
-    \ 00011a aa                   tax
-    \ 00011b 68                   pla
-    \ 00011c 22......             jsl     long:`?L181`
-    \ 000120 4c....               jmp     .kbank `?L34`
-    \ 000123          `?L30`:
+    \ 000117 a5..                 lda     dp:.tiny (_Dp+12)
+    \ 000119 a00800               ldy     ##8
+    \ 00011c 18                   clc
+    \ 00011d 77..                 adc     [.tiny (_Dp+8)],y
+    \ 00011f 97..                 sta     [.tiny (_Dp+8)],y
+    \ 000121 4c....               jmp     .kbank `?L34`
+    \ 000124          `?L30`:
 0124                  	}
 0125                  }
-    \ 000123 7a                   ply
     \ 000124 7a                   ply
     \ 000125 7a                   ply
     \ 000126 7a                   ply
-    \ 000127 5c......             jmp     long:`?L6`
+    \ 000127 7a                   ply
+    \ 000128 5c......             jmp     long:`?L6`
 0126                  
 0127                  uint32_t pmalloc_sizeof(pmalloc_t *pm, void __far *ptr) {
     \ 000000                      .section farcode,text
@@ -667,13 +643,11 @@
 0130                  
 0131                  	// Return its size
 0132                  	return node->size;
-    \ 000000 a00a00               ldy     ##10
+    \ 000000 a00800               ldy     ##8
     \ 000003 b7..                 lda     [.tiny (_Dp+4)],y
-    \ 000005 aa                   tax
-    \ 000006 a00800               ldy     ##8
-    \ 000009 b7..                 lda     [.tiny (_Dp+4)],y
+    \ 000005 a20000               ldx     ##0
 0133                  }
-    \ 00000b 6b                   rtl
+    \ 000008 6b                   rtl
 0134                  
 0135                  uint32_t pmalloc_totalmem(pmalloc_t *pm) { return pm->totalmem; }
     \ 000000                      .section farcode,text
@@ -712,16 +686,16 @@
     \ 000000                      .section farcode,text
     \ 000000                      .public pmalloc_overheadmem
     \ 000000          pmalloc_overheadmem:
-    \ 000000 22......             jsl     long:`?L182`
+    \ 000000 22......             jsl     long:`?L174`
     \ 000004 86..                 stx     dp:.tiny _Dp
     \ 000006 0a                   asl     a
     \ 000007 26..                 rol     dp:.tiny _Dp
-    \ 000009 0a                   asl     a
-    \ 00000a 26..                 rol     dp:.tiny _Dp
-    \ 00000c a6..                 ldx     dp:.tiny _Dp
-    \ 00000e 86..                 stx     dp:.tiny (_Dp+2)
-    \ 000010 85..                 sta     dp:.tiny _Dp
-    \ 000012 86..                 stx     dp:.tiny (_Dp+4)
+    \ 000009 a6..                 ldx     dp:.tiny _Dp
+    \ 00000b 86..                 stx     dp:.tiny (_Dp+2)
+    \ 00000d 85..                 sta     dp:.tiny _Dp
+    \ 00000f 86..                 stx     dp:.tiny (_Dp+4)
+    \ 000011 0a                   asl     a
+    \ 000012 26..                 rol     dp:.tiny (_Dp+4)
     \ 000014 0a                   asl     a
     \ 000015 26..                 rol     dp:.tiny (_Dp+4)
     \ 000017 a6..                 ldx     dp:.tiny (_Dp+4)
@@ -768,7 +742,7 @@
     \ 000024 85..                 sta     dp:.tiny (_Dp+6)
     \ 000026 a7..                 lda     [.tiny _Dp]
     \ 000028 85..                 sta     dp:.tiny (_Dp+4)
-    \ 00002a 22......             jsl     long:`?L176`
+    \ 00002a 22......             jsl     long:`?L169`
 0147                  		return;
     \ 00002e 4c....               jmp     .kbank `?L59`
     \ 000031          `?L61`:
@@ -786,7 +760,7 @@
 0154                  		pmalloc_item_t *oldroot = *root;
 0155                  		oldroot->prev = node;
 0156                  		node->next = oldroot;
-    \ 00003b 22......             jsl     long:`?L177`
+    \ 00003b 22......             jsl     long:`?L170`
     \ 00003f a5..                 lda     dp:.tiny (_Dp+4)
     \ 000041 87..                 sta     [.tiny (_Dp+8)]
     \ 000043 a5..                 lda     dp:.tiny (_Dp+6)
@@ -795,19 +769,19 @@
     \ 000049 a00400               ldy     ##4
     \ 00004c 97..                 sta     [.tiny (_Dp+4)],y
     \ 00004e a5..                 lda     dp:.tiny (_Dp+10)
-    \ 000050 805d                 bra     `?L159`
+    \ 000050 805d                 bra     `?L154`
     \ 000052          `?L64`:
 0157                  		*root = node;
 0158                  	} else {
 0159                  		// New block within or at end of list
 0160                  		pmalloc_item_t __far *current = *root;
-    \ 000052 22......             jsl     long:`?L177`
+    \ 000052 22......             jsl     long:`?L170`
     \ 000056          `?L67`:
 0161                  		pmalloc_item_t __far *node = (pmalloc_item_t __far *)ptr;
 0162                  		
 0163                  		// Skip until we find the right place to insert, or the end of the list
 0164                  		while(current->next != NULL && node > current->next) current = current->next;
-    \ 000056 22......             jsl     long:`?L183`
+    \ 000056 22......             jsl     long:`?L176`
     \ 00005a f016                 beq     `?L68`
     \ 00005c a00400               ldy     ##4
     \ 00005f b7..                 lda     [.tiny (_Dp+8)],y
@@ -816,18 +790,18 @@
     \ 000066 b7..                 lda     [.tiny (_Dp+8)],y
     \ 000068 e5..                 sbc     dp:.tiny (_Dp+6)
     \ 00006a b006                 bcs     `?L68`
-    \ 00006c 22......             jsl     long:`?L162`
+    \ 00006c 22......             jsl     long:`?L157`
     \ 000070 80e4                 bra     `?L67`
     \ 000072          `?L68`:
 0165                  
 0166                  		// We're inserting the block at...
 0167                  		if(current->next == NULL) {
-    \ 000072 22......             jsl     long:`?L183`
+    \ 000072 22......             jsl     long:`?L176`
     \ 000076 d014                 bne     `?L70`
 0168                  			// The end of list
 0169                  			node->prev = current;
 0170                  			current->next = node;
-    \ 000078 22......             jsl     long:`?L179`
+    \ 000078 22......             jsl     long:`?L172`
     \ 00007c a5..                 lda     dp:.tiny (_Dp+4)
     \ 00007e a00400               ldy     ##4
     \ 000081 97..                 sta     [.tiny (_Dp+8)],y
@@ -853,12 +827,12 @@
     \ 0000a0 97..                 sta     [.tiny (_Dp+8)],y
 0176                  			node->prev = current;
 0177                  			node->next = oldnext;
-    \ 0000a2 22......             jsl     long:`?L179`
+    \ 0000a2 22......             jsl     long:`?L172`
     \ 0000a6 a5..                 lda     dp:.tiny _Dp
     \ 0000a8 a00400               ldy     ##4
     \ 0000ab 97..                 sta     [.tiny (_Dp+4)],y
     \ 0000ad a5..                 lda     dp:.tiny (_Dp+2)
-    \ 0000af a00600   `?L159`:    ldy     ##6
+    \ 0000af a00600   `?L154`:    ldy     ##6
     \ 0000b2 97..                 sta     [.tiny (_Dp+4)],y
 0178                  			oldnext->prev = node;
     \ 0000b4 a5..                 lda     dp:.tiny (_Dp+4)
@@ -930,7 +904,7 @@
 0192                  			*root = node->prev; 
     \ 00005a a7..                 lda     [.tiny (_Dp+4)]
     \ 00005c 87..                 sta     [.tiny _Dp]
-    \ 00005e 800a                 bra     `?L160`
+    \ 00005e 800a                 bra     `?L155`
     \ 000060          `?L85`:
 0193                  		else 
 0194                  			*root = node->next; 
@@ -938,7 +912,7 @@
     \ 000063 b7..                 lda     [.tiny (_Dp+4)],y
     \ 000065 87..                 sta     [.tiny _Dp]
     \ 000067 a00600               ldy     ##6
-    \ 00006a          `?L160`:
+    \ 00006a          `?L155`:
     \ 00006a b7..                 lda     [.tiny (_Dp+4)],y
     \ 00006c a00200               ldy     ##2
     \ 00006f 97..                 sta     [.tiny _Dp],y
@@ -948,7 +922,7 @@
 0197                  	// Clear the next and previous pointers
 0198                  	node->next = NULL;
 0199                  	node->prev = NULL;
-    \ 000071 22......             jsl     long:`?L176`
+    \ 000071 22......             jsl     long:`?L169`
     \ 000075 87..                 sta     [.tiny (_Dp+4)]
     \ 000077 a00200               ldy     ##2
     \ 00007a 97..                 sta     [.tiny (_Dp+4)],y
@@ -982,7 +956,7 @@
     \ 000019 85..                 sta     dp:.tiny _Dp
     \ 00001b a9....               lda     ##.word2 `_StringLiteral_[45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,13]`
     \ 00001e 85..                 sta     dp:.tiny (_Dp+2)
-    \ 000020 22......             jsl     long:`?L170`
+    \ 000020 22......             jsl     long:`?L164`
 0205                  	printf(" - freemem: %lu\r", pm->freemem);
     \ 000024 a00a00               ldy     ##10
     \ 000027 b7..                 lda     [.tiny _Dp],y
@@ -993,7 +967,7 @@
     \ 000030 a9....               lda     ##.word0 `_StringLiteral_[32,45,32,102,114,101,101,109,101,109,58,32,37,108,117,13]`
     \ 000033 85..                 sta     dp:.tiny _Dp
     \ 000035 a9....               lda     ##.word2 `_StringLiteral_[32,45,32,102,114,101,101,109,101,109,58,32,37,108,117,13]`
-    \ 000038 22......             jsl     long:`?L174`
+    \ 000038 22......             jsl     long:`?L167`
     \ 00003c 8305                 sta     5,s
 0206                  	printf(" - totalmem: %lu\r", pm->totalmem);
     \ 00003e a329                 lda     41,s
@@ -1009,10 +983,10 @@
     \ 000052 a9....               lda     ##.word0 `_StringLiteral_[32,45,32,116,111,116,97,108,109,101,109,58,32,37,108,117,13]`
     \ 000055 85..                 sta     dp:.tiny _Dp
     \ 000057 a9....               lda     ##.word2 `_StringLiteral_[32,45,32,116,111,116,97,108,109,101,109,58,32,37,108,117,13]`
-    \ 00005a 22......             jsl     long:`?L174`
+    \ 00005a 22......             jsl     long:`?L167`
     \ 00005e 8309                 sta     9,s
 0207                  	printf(" - totalnodes: %lu (sizeof %d)\r", pm->totalnodes, (int)sizeof(pmalloc_item_t));
-    \ 000060 f40c00               pea     ##12
+    \ 000060 f40a00               pea     ##10
     \ 000063 a32f                 lda     47,s
     \ 000065 85..                 sta     dp:.tiny (_Dp+2)
     \ 000067 a32d                 lda     45,s
@@ -1026,7 +1000,7 @@
     \ 000077 a9....               lda     ##.word0 `_StringLiteral_[32,45,32,116,111,116,97,108,110,111,100,101,115,58,32,37,108,117,32,40,115,105,122,101,111,102,32,37,100,41,13]`
     \ 00007a 85..                 sta     dp:.tiny _Dp
     \ 00007c a9....               lda     ##.word2 `_StringLiteral_[32,45,32,116,111,116,97,108,110,111,100,101,115,58,32,37,108,117,32,40,115,105,122,101,111,102,32,37,100,41,13]`
-    \ 00007f 22......             jsl     long:`?L174`
+    \ 00007f 22......             jsl     long:`?L167`
     \ 000083 830f                 sta     15,s
 0208                  	printf(" - assigned:\r");
     \ 000085 3b                   tsc
@@ -1037,7 +1011,7 @@
     \ 00008e 85..                 sta     dp:.tiny _Dp
     \ 000090 a9....               lda     ##.word2 `_StringLiteral_[32,45,32,97,115,115,105,103,110,101,100,58,13]`
     \ 000093 85..                 sta     dp:.tiny (_Dp+2)
-    \ 000095 22......             jsl     long:`?L170`
+    \ 000095 22......             jsl     long:`?L164`
 0209                  	for(pmalloc_item_t __far * current = pm->assigned; current != NULL; current=current->next) {
     \ 000099 a00600               ldy     ##6
     \ 00009c b7..                 lda     [.tiny _Dp],y
@@ -1048,25 +1022,25 @@
     \ 0000a7          `?L92`:
     \ 0000a7 a5..                 lda     dp:.tiny (_Dp+8)
     \ 0000a9 05..                 ora     dp:.tiny (_Dp+10)
-    \ 0000ab f003                 beq     `?L245`
+    \ 0000ab f003                 beq     `?L235`
     \ 0000ad 4c....               jmp     .kbank `?L91`
-    \ 0000b0          `?L245`:
-0210                  		printf("  - (%08llx) %08llx- %08llx-size:%lld (%u sys, %lu usr)\r", (unsigned long long)(char __far *)current, (unsigned long long)(char __far *)current + sizeof(pmalloc_item_t), (unsigned long long)(char __far *)current + current->size + sizeof(pmalloc_item_t), (unsigned long long)(current->size + sizeof(pmalloc_item_t)), sizeof(pmalloc_item_t), current->size);
+    \ 0000b0          `?L235`:
+0210                  		printf("  - (%08llx) %08llx- %08llx-size:%lld (%u sys, %hu usr)\r", (unsigned long long)(char __far *)current, (unsigned long long)(char __far *)current + sizeof(pmalloc_item_t), (unsigned long long)(char __far *)current + current->size + sizeof(pmalloc_item_t), (unsigned long long)(current->size + sizeof(pmalloc_item_t)), sizeof(pmalloc_item_t), current->size);
 0211                  	} 
 0212                  	printf(" - available:\r");
     \ 0000b0 a9....               lda     ##.word0 `_StringLiteral_[32,45,32,97,118,97,105,108,97,98,108,101,58,13]`
     \ 0000b3 85..                 sta     dp:.tiny _Dp
     \ 0000b5 a9....               lda     ##.word2 `_StringLiteral_[32,45,32,97,118,97,105,108,97,98,108,101,58,13]`
     \ 0000b8 85..                 sta     dp:.tiny (_Dp+2)
-    \ 0000ba 22......             jsl     long:`?L170`
+    \ 0000ba 22......             jsl     long:`?L164`
 0213                  	for(pmalloc_item_t __far * current = pm->available; current != NULL; current=current->next) {
     \ 0000be a00200               ldy     ##2
-    \ 0000c1 22......             jsl     long:`?L177`
+    \ 0000c1 22......             jsl     long:`?L170`
     \ 0000c5          `?L96`:
     \ 0000c5 a5..                 lda     dp:.tiny (_Dp+8)
     \ 0000c7 05..                 ora     dp:.tiny (_Dp+10)
     \ 0000c9 d01e                 bne     `?L95`
-0214                  		printf("  - (%08llx) %08llx->%08llx-size:%lld (%u sys, %lu usr)\r", (unsigned long long)(char __far *)current, (unsigned long long)(char __far *)current + sizeof(pmalloc_item_t), (unsigned long long)(char __far *)current + current->size + sizeof(pmalloc_item_t), (unsigned long long)(current->size + sizeof(pmalloc_item_t)), sizeof(pmalloc_item_t), current->size);
+0214                  		printf("  - (%08llx) %08llx->%08llx-size:%lld (%u sys, %hu usr)\r", (unsigned long long)(char __far *)current, (unsigned long long)(char __far *)current + sizeof(pmalloc_item_t), (unsigned long long)(char __far *)current + current->size + sizeof(pmalloc_item_t), (unsigned long long)(current->size + sizeof(pmalloc_item_t)), sizeof(pmalloc_item_t), current->size);
 0215                  	} 
 0216                  
 0217                  	printf("---------------------\r");
@@ -1105,13 +1079,13 @@
     \ 000107 830f                 sta     15,s
     \ 000109 8311                 sta     17,s
     \ 00010b 3b                   tsc
-    \ 00010c 22......             jsl     long:`?L178`
+    \ 00010c 22......             jsl     long:`?L171`
     \ 000110 3b                   tsc
     \ 000111 18                   clc
-    \ 000112 22......             jsl     long:`?L168`
-    \ 000116          `?L141`:
-    \ 000116 22......             jsl     long:`?L166`
-    \ 00011a 10fa                 bpl     `?L141`
+    \ 000112 22......             jsl     long:`?L162`
+    \ 000116          `?L140`:
+    \ 000116 22......             jsl     long:`?L160`
+    \ 00011a 10fa                 bpl     `?L140`
     \ 00011c a5..                 lda     dp:.tiny (_Dp+10)
     \ 00011e aa                   tax
     \ 00011f a5..                 lda     dp:.tiny (_Dp+8)
@@ -1121,15 +1095,15 @@
     \ 000126 a90000               lda     ##0
     \ 000129 8317                 sta     23,s
     \ 00012b 8319                 sta     25,s
-    \ 00012d 22......             jsl     long:`?L165`
-    \ 000131 831b                 sta     27,s
-    \ 000133 8a                   txa
-    \ 000134 831d                 sta     29,s
-    \ 000136 a90000               lda     ##0
+    \ 00012d a00800               ldy     ##8
+    \ 000130 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 000132 831b                 sta     27,s
+    \ 000134 a90000               lda     ##0
+    \ 000137 831d                 sta     29,s
     \ 000139 831f                 sta     31,s
     \ 00013b 8321                 sta     33,s
     \ 00013d 3b                   tsc
-    \ 00013e 22......             jsl     long:`?L167`
+    \ 00013e 22......             jsl     long:`?L161`
     \ 000142 3b                   tsc
     \ 000143 18                   clc
     \ 000144 691300               adc     ##19
@@ -1137,271 +1111,171 @@
     \ 000149 85..                 sta     dp:.tiny (_Dp+4)
     \ 00014b 3b                   tsc
     \ 00014c 18                   clc
-    \ 00014d 22......             jsl     long:`?L175`
-    \ 000151          `?L143`:
-    \ 000151 22......             jsl     long:`?L166`
-    \ 000155 10fa                 bpl     `?L143`
+    \ 00014d 22......             jsl     long:`?L168`
+    \ 000151          `?L142`:
+    \ 000151 22......             jsl     long:`?L160`
+    \ 000155 10fa                 bpl     `?L142`
     \ 000157 3b                   tsc
-    \ 000158 22......             jsl     long:`?L167`
+    \ 000158 22......             jsl     long:`?L161`
     \ 00015c 3b                   tsc
     \ 00015d 18                   clc
-    \ 00015e 22......             jsl     long:`?L169`
-    \ 000162          `?L145`:
-    \ 000162 22......             jsl     long:`?L166`
-    \ 000166 10fa                 bpl     `?L145`
-    \ 000168 22......             jsl     long:`?L165`
-    \ 00016c 18                   clc
-    \ 00016d 690c00               adc     ##12
-    \ 000170 9001                 bcc     `?L147`
-    \ 000172 e8                   inx
-    \ 000173 831b     `?L147`:    sta     27,s
-    \ 000175 8a                   txa
-    \ 000176 831d                 sta     29,s
-    \ 000178 a90000               lda     ##0
-    \ 00017b 831f                 sta     31,s
-    \ 00017d 8321                 sta     33,s
-    \ 00017f a00a00               ldy     ##10
-    \ 000182 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000184 48                   pha
-    \ 000185 a00800               ldy     ##8
-    \ 000188 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 00018a 48                   pha
-    \ 00018b f40c00               pea     ##12
-    \ 00018e 3b                   tsc
-    \ 00018f 18                   clc
-    \ 000190 692100               adc     ##33
-    \ 000193 a20000               ldx     ##0
-    \ 000196 da                   phx
-    \ 000197 48                   pha
-    \ 000198 3b                   tsc
-    \ 000199 18                   clc
-    \ 00019a 691d00               adc     ##29
-    \ 00019d da                   phx
-    \ 00019e 48                   pha
-    \ 00019f 3b                   tsc
-    \ 0001a0 18                   clc
-    \ 0001a1 691900               adc     ##25
-    \ 0001a4 da                   phx
-    \ 0001a5 48                   pha
-    \ 0001a6 3b                   tsc
-    \ 0001a7 18                   clc
-    \ 0001a8 691500               adc     ##21
-    \ 0001ab da                   phx
-    \ 0001ac 48                   pha
-    \ 0001ad a9....               lda     ##.word0 `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]`
-    \ 0001b0 85..                 sta     dp:.tiny _Dp
-    \ 0001b2 a9....               lda     ##.word2 `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]`
-    \ 0001b5 22......             jsl     long:`?L174`
-    \ 0001b9 8317                 sta     23,s
-    \ 0001bb 3b                   tsc
-    \ 0001bc 18                   clc
-    \ 0001bd 691600               adc     ##22
-    \ 0001c0 1b                   tcs
-    \ 0001c1 a00600               ldy     ##6
-    \ 0001c4 22......             jsl     long:`?L162`
-    \ 0001c8 4c....               jmp     .kbank `?L96`
-    \ 0001cb          `?L91`:
-    \ 0001cb a5..                 lda     dp:.tiny (_Dp+10)
-    \ 0001cd aa                   tax
-    \ 0001ce a5..                 lda     dp:.tiny (_Dp+8)
-    \ 0001d0 8303                 sta     3,s
-    \ 0001d2 8a                   txa
-    \ 0001d3 8305                 sta     5,s
-    \ 0001d5 a90000               lda     ##0
-    \ 0001d8 8307                 sta     7,s
-    \ 0001da 8309                 sta     9,s
-    \ 0001dc a5..                 lda     dp:.tiny (_Dp+10)
-    \ 0001de aa                   tax
-    \ 0001df a5..                 lda     dp:.tiny (_Dp+8)
-    \ 0001e1 830b                 sta     11,s
-    \ 0001e3 8a                   txa
-    \ 0001e4 830d                 sta     13,s
-    \ 0001e6 a90000               lda     ##0
-    \ 0001e9 830f                 sta     15,s
-    \ 0001eb 8311                 sta     17,s
-    \ 0001ed 3b                   tsc
-    \ 0001ee 22......             jsl     long:`?L178`
-    \ 0001f2 3b                   tsc
-    \ 0001f3 18                   clc
-    \ 0001f4 22......             jsl     long:`?L168`
-    \ 0001f8          `?L150`:
-    \ 0001f8 22......             jsl     long:`?L166`
-    \ 0001fc 10fa                 bpl     `?L150`
-    \ 0001fe a5..                 lda     dp:.tiny (_Dp+10)
-    \ 000200 aa                   tax
-    \ 000201 a5..                 lda     dp:.tiny (_Dp+8)
-    \ 000203 8313                 sta     19,s
-    \ 000205 8a                   txa
-    \ 000206 8315                 sta     21,s
-    \ 000208 a90000               lda     ##0
-    \ 00020b 8317                 sta     23,s
-    \ 00020d 8319                 sta     25,s
-    \ 00020f 22......             jsl     long:`?L165`
-    \ 000213 831b                 sta     27,s
-    \ 000215 8a                   txa
-    \ 000216 831d                 sta     29,s
-    \ 000218 a90000               lda     ##0
-    \ 00021b 831f                 sta     31,s
-    \ 00021d 8321                 sta     33,s
-    \ 00021f 3b                   tsc
-    \ 000220 22......             jsl     long:`?L167`
-    \ 000224 3b                   tsc
-    \ 000225 18                   clc
-    \ 000226 691300               adc     ##19
-    \ 000229 86..                 stx     dp:.tiny (_Dp+6)
-    \ 00022b 85..                 sta     dp:.tiny (_Dp+4)
-    \ 00022d 3b                   tsc
-    \ 00022e 18                   clc
-    \ 00022f 22......             jsl     long:`?L175`
-    \ 000233          `?L152`:
-    \ 000233 22......             jsl     long:`?L166`
-    \ 000237 10fa                 bpl     `?L152`
-    \ 000239 3b                   tsc
-    \ 00023a 22......             jsl     long:`?L167`
-    \ 00023e 3b                   tsc
-    \ 00023f 18                   clc
-    \ 000240 22......             jsl     long:`?L169`
-    \ 000244          `?L154`:
-    \ 000244 22......             jsl     long:`?L166`
-    \ 000248 10fa                 bpl     `?L154`
-    \ 00024a 22......             jsl     long:`?L165`
-    \ 00024e 18                   clc
-    \ 00024f 690c00               adc     ##12
-    \ 000252 9001                 bcc     `?L156`
-    \ 000254 e8                   inx
-    \ 000255 831b     `?L156`:    sta     27,s
-    \ 000257 8a                   txa
-    \ 000258 831d                 sta     29,s
-    \ 00025a a90000               lda     ##0
-    \ 00025d 831f                 sta     31,s
-    \ 00025f 8321                 sta     33,s
-    \ 000261 a00a00               ldy     ##10
-    \ 000264 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000266 48                   pha
-    \ 000267 a00800               ldy     ##8
-    \ 00026a b7..                 lda     [.tiny (_Dp+8)],y
-    \ 00026c 48                   pha
-    \ 00026d f40c00               pea     ##12
-    \ 000270 3b                   tsc
-    \ 000271 18                   clc
-    \ 000272 692100               adc     ##33
-    \ 000275 a20000               ldx     ##0
-    \ 000278 da                   phx
-    \ 000279 48                   pha
-    \ 00027a 3b                   tsc
-    \ 00027b 18                   clc
-    \ 00027c 691d00               adc     ##29
-    \ 00027f da                   phx
-    \ 000280 48                   pha
-    \ 000281 3b                   tsc
-    \ 000282 18                   clc
-    \ 000283 691900               adc     ##25
-    \ 000286 da                   phx
-    \ 000287 48                   pha
-    \ 000288 3b                   tsc
-    \ 000289 18                   clc
-    \ 00028a 691500               adc     ##21
-    \ 00028d da                   phx
-    \ 00028e 48                   pha
-    \ 00028f a9....               lda     ##.word0 `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]`
-    \ 000292 85..                 sta     dp:.tiny _Dp
-    \ 000294 a9....               lda     ##.word2 `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]`
-    \ 000297 22......             jsl     long:`?L174`
-    \ 00029b 8317                 sta     23,s
-    \ 00029d 3b                   tsc
-    \ 00029e 18                   clc
-    \ 00029f 691600               adc     ##22
-    \ 0002a2 1b                   tcs
-    \ 0002a3 a00600               ldy     ##6
-    \ 0002a6 22......             jsl     long:`?L162`
-    \ 0002aa 4c....               jmp     .kbank `?L92`
+    \ 00015e 22......             jsl     long:`?L163`
+    \ 000162          `?L144`:
+    \ 000162 22......             jsl     long:`?L160`
+    \ 000166 10fa                 bpl     `?L144`
+    \ 000168 22......             jsl     long:`?L175`
+    \ 00016c 77..                 adc     [.tiny (_Dp+8)],y
+    \ 00016e 831b                 sta     27,s
+    \ 000170 a90000               lda     ##0
+    \ 000173 831d                 sta     29,s
+    \ 000175 831f                 sta     31,s
+    \ 000177 8321                 sta     33,s
+    \ 000179 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 00017b 48                   pha
+    \ 00017c f40a00               pea     ##10
+    \ 00017f 3b                   tsc
+    \ 000180 18                   clc
+    \ 000181 691f00               adc     ##31
+    \ 000184 a20000               ldx     ##0
+    \ 000187 da                   phx
+    \ 000188 48                   pha
+    \ 000189 3b                   tsc
+    \ 00018a 18                   clc
+    \ 00018b 691b00               adc     ##27
+    \ 00018e da                   phx
+    \ 00018f 48                   pha
+    \ 000190 3b                   tsc
+    \ 000191 18                   clc
+    \ 000192 691700               adc     ##23
+    \ 000195 da                   phx
+    \ 000196 48                   pha
+    \ 000197 3b                   tsc
+    \ 000198 18                   clc
+    \ 000199 691300               adc     ##19
+    \ 00019c da                   phx
+    \ 00019d 48                   pha
+    \ 00019e a9....               lda     ##.word0 `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]`
+    \ 0001a1 85..                 sta     dp:.tiny _Dp
+    \ 0001a3 a9....               lda     ##.word2 `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]`
+    \ 0001a6 22......             jsl     long:`?L167`
+    \ 0001aa 8315                 sta     21,s
+    \ 0001ac 3b                   tsc
+    \ 0001ad 18                   clc
+    \ 0001ae 691400               adc     ##20
+    \ 0001b1 1b                   tcs
+    \ 0001b2 a00600               ldy     ##6
+    \ 0001b5 22......             jsl     long:`?L157`
+    \ 0001b9 4c....               jmp     .kbank `?L96`
+    \ 0001bc          `?L91`:
+    \ 0001bc a5..                 lda     dp:.tiny (_Dp+10)
+    \ 0001be aa                   tax
+    \ 0001bf a5..                 lda     dp:.tiny (_Dp+8)
+    \ 0001c1 8303                 sta     3,s
+    \ 0001c3 8a                   txa
+    \ 0001c4 8305                 sta     5,s
+    \ 0001c6 a90000               lda     ##0
+    \ 0001c9 8307                 sta     7,s
+    \ 0001cb 8309                 sta     9,s
+    \ 0001cd a5..                 lda     dp:.tiny (_Dp+10)
+    \ 0001cf aa                   tax
+    \ 0001d0 a5..                 lda     dp:.tiny (_Dp+8)
+    \ 0001d2 830b                 sta     11,s
+    \ 0001d4 8a                   txa
+    \ 0001d5 830d                 sta     13,s
+    \ 0001d7 a90000               lda     ##0
+    \ 0001da 830f                 sta     15,s
+    \ 0001dc 8311                 sta     17,s
+    \ 0001de 3b                   tsc
+    \ 0001df 22......             jsl     long:`?L171`
+    \ 0001e3 3b                   tsc
+    \ 0001e4 18                   clc
+    \ 0001e5 22......             jsl     long:`?L162`
+    \ 0001e9          `?L147`:
+    \ 0001e9 22......             jsl     long:`?L160`
+    \ 0001ed 10fa                 bpl     `?L147`
+    \ 0001ef a5..                 lda     dp:.tiny (_Dp+10)
+    \ 0001f1 aa                   tax
+    \ 0001f2 a5..                 lda     dp:.tiny (_Dp+8)
+    \ 0001f4 8313                 sta     19,s
+    \ 0001f6 8a                   txa
+    \ 0001f7 8315                 sta     21,s
+    \ 0001f9 a90000               lda     ##0
+    \ 0001fc 8317                 sta     23,s
+    \ 0001fe 8319                 sta     25,s
+    \ 000200 a00800               ldy     ##8
+    \ 000203 b7..                 lda     [.tiny (_Dp+8)],y
+    \ 000205 831b                 sta     27,s
+    \ 000207 a90000               lda     ##0
+    \ 00020a 831d                 sta     29,s
+    \ 00020c 831f                 sta     31,s
+    \ 00020e 8321                 sta     33,s
+    \ 000210 3b                   tsc
+    \ 000211 22......             jsl     long:`?L161`
+    \ 000215 3b                   tsc
+    \ 000216 18                   clc
+    \ 000217 691300               adc     ##19
+    \ 00021a 86..                 stx     dp:.tiny (_Dp+6)
+    \ 00021c 85..                 sta     dp:.tiny (_Dp+4)
+    \ 00021e 3b                   tsc
+    \ 00021f 18                   clc
+    \ 000220 22......             jsl     long:`?L168`
+    \ 000224          `?L149`:
+    \ 000224 22......             jsl     long:`?L160`
+    \ 000228 10fa                 bpl     `?L149`
+    \ 00022a 3b                   tsc
+    \ 00022b 22......             jsl     long:`?L161`
+    \ 00022f 3b                   tsc
+    \ 000230 18                   clc
+    \ 000231 22......             jsl     long:`?L163`
+    \ 000235          `?L151`:
+    \ 000235 22......             jsl     long:`?L160`
+    \ 000239 10fa                 bpl     `?L151`
+    \ 00023b 22......             jsl     long:`?L175`
+    \ 00023f 77..                 adc     [.tiny (_Dp+8)],y
+    \ 000241 831b                 sta     27,s
+    \ 000243 a90000               lda     ##0
+    \ 000246 831d                 sta     29,s
+    \ 000248 831f                 sta     31,s
+    \ 00024a 8321                 sta     33,s
+    \ 00024c b7..                 lda     [.tiny (_Dp+8)],y
+    \ 00024e 48                   pha
+    \ 00024f f40a00               pea     ##10
+    \ 000252 3b                   tsc
+    \ 000253 18                   clc
+    \ 000254 691f00               adc     ##31
+    \ 000257 a20000               ldx     ##0
+    \ 00025a da                   phx
+    \ 00025b 48                   pha
+    \ 00025c 3b                   tsc
+    \ 00025d 18                   clc
+    \ 00025e 691b00               adc     ##27
+    \ 000261 da                   phx
+    \ 000262 48                   pha
+    \ 000263 3b                   tsc
+    \ 000264 18                   clc
+    \ 000265 691700               adc     ##23
+    \ 000268 da                   phx
+    \ 000269 48                   pha
+    \ 00026a 3b                   tsc
+    \ 00026b 18                   clc
+    \ 00026c 691300               adc     ##19
+    \ 00026f da                   phx
+    \ 000270 48                   pha
+    \ 000271 a9....               lda     ##.word0 `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]`
+    \ 000274 85..                 sta     dp:.tiny _Dp
+    \ 000276 a9....               lda     ##.word2 `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]`
+    \ 000279 22......             jsl     long:`?L167`
+    \ 00027d 8315                 sta     21,s
+    \ 00027f 3b                   tsc
+    \ 000280 18                   clc
+    \ 000281 691400               adc     ##20
+    \ 000284 1b                   tcs
+    \ 000285 a00600               ldy     ##6
+    \ 000288 22......             jsl     long:`?L157`
+    \ 00028c 4c....               jmp     .kbank `?L92`
 0219                  #endif
-0220                  
-0221                  /*
-0222                  void __far *pmalloc_calloc(pmalloc_t *pm, uint32_t num, uint32_t size)
-0223                  {
-0224                  	char *mem = pmalloc_malloc(pm, num * size);
-0225                  	if(mem==NULL) return NULL;
-0226                  	for(uint32_t i=0; i<size; i++) mem[i]=0;
-0227                  	return mem;
-0228                  }
-0229                  */
-0230                  
-0231                  /*
-0232                  void __far *pmalloc_realloc(pmalloc_t *pm, void __far *ptr, uint32_t requestedSize)
-0233                  {
-0234                      // Match stdlib realloc() NULL interface
-0235                      if (ptr == NULL) return pmalloc_malloc(pm, requestedSize);
-0236                  
-0237                      // Get the actual pmalloc_item_t of the block
-0238                  	pmalloc_item_t *node = (pmalloc_item_t __far *)(ptr - sizeof(pmalloc_item_t));
-0239                      
-0240                      // If the requested size is equal to the current size, return the original pointer
-0241                      if (node->size == requestedSize) return ptr;
-0242                  
-0243                      // If the requested size is smaller:
-0244                      if (requestedSize < node->size) {
-0245                       	// If the difference is less than twice sizeof(pmalloc_item_t), it's not worth doing anything, return the original pointer
-0246                       	if(node->size - requestedSize < sizeof(pmalloc_item_t)*2) return ptr;
-0247                  
-0248                       	// Otherwise, create a free block for the extra space, truncate the block at the new size, and merge around it
-0249                       	pmalloc_item_t *newFree = (pmalloc_item_t __far *)((char*)node + sizeof(pmalloc_item_t) + requestedSize);
-0250                       	newFree->size = (node->size - requestedSize) - sizeof(pmalloc_item_t);
-0251                       	pmalloc_item_insert(&pm->available, newFree);
-0252                  
-0253                       	// Update free memory and node count
-0254                       	pm->freemem += (node->size - requestedSize) - sizeof(pmalloc_item_t);
-0255                       	pm->totalnodes++;
-0256                  
-0257                       	// Resize this block
-0258                       	node->size = requestedSize;
-0259                  
-0260                       	// Merge around the new free block
-0261                       	pmalloc_merge(pm, newFree);
-0262                  
-0263                       	// Return original pointer
-0264                       	return ptr;
-0265                      }
-0266                  
-0267                      // // Shortcut if we know there's not enough memory
-0268                      if (requestedSize - node->size > pmalloc_freemem(pm)) return NULL;
-0269                  
-0270                      // Expand the block if the requested size is larger than the current size
-0271                      if (requestedSize > node->size) {
-0272                      	// Does the next allocated block have enough space before it for this node to expand?
-0273                      	if(node->next == NULL || (char*)(node->next) > (char*)node + sizeof(pmalloc_item_t) + requestedSize) {
-0274                      		// Get the existing block of free space in between node and the next
-0275                      		pmalloc_item_t *freeBlock = (pmalloc_item_t __far *)((char*)node + sizeof(pmalloc_item_t) + node->size);
-0276                      		// Get the free block current size
-0277                      		uint32_t freeBlockSize = freeBlock->size;
-0278                      		// Remove that block from the free chain
-0279                      		pmalloc_item_remove(&pm->available, freeBlock);
-0280                  
-0281                      		// Create a new free block with the difference in size, after this node if it was resized
-0282                      		freeBlock = (pmalloc_item_t __far *)((char*)node + sizeof(pmalloc_item_t) + requestedSize);
-0283                      		freeBlock->size = freeBlockSize - (requestedSize - node->size);
-0284                  
-0285                      		// Add it to the free list
-0286                      		pmalloc_item_insert(&pm->available, freeBlock);
-0287                  
-0288                      		// Update the stats
-0289                      		pm->freemem -= requestedSize - node->size;
-0290                      		// pm->totalnodes stays the same, we removed one and added one
-0291                  
-0292                      		// Resize this block
-0293                      		node->size = requestedSize;
-0294                  
-0295                      		// Merge around the new free block
-0296                       		pmalloc_merge(pm, freeBlock);
-0297                  
-0298                      		// Return original pointer
-0299                      		return ptr;
-0300                      	};
-0301                      }
-0302                  
-0303                      // If all else fails, completely reallocate the block, copy its contents, and free the old block.
     \ 000000                      .section farcode,text
-    \ 000000          `?L161`:
+    \ 000000          `?L156`:
     \ 000000 a5..                 lda     dp:.tiny (_Dp+8)
     \ 000002 85..                 sta     dp:.tiny (_Dp+4)
     \ 000004 a5..                 lda     dp:.tiny (_Dp+10)
@@ -1412,27 +1286,20 @@
     \ 00000e 85..                 sta     dp:.tiny (_Dp+2)
     \ 000010 6b                   rtl
     \ 000000                      .section farcode,text
-    \ 000000          `?L162`:
+    \ 000000          `?L157`:
     \ 000000 b7..                 lda     [.tiny (_Dp+8)],y
     \ 000002 85..                 sta     dp:.tiny (_Dp+2)
     \ 000004 a00400               ldy     ##4
     \ 000007 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000009          `?L163`:
+    \ 000009          `?L158`:
     \ 000009 85..                 sta     dp:.tiny _Dp
-    \ 00000b          `?L164`:
+    \ 00000b          `?L159`:
     \ 00000b 85..                 sta     dp:.tiny (_Dp+8)
     \ 00000d a5..                 lda     dp:.tiny (_Dp+2)
     \ 00000f 85..                 sta     dp:.tiny (_Dp+10)
     \ 000011 6b                   rtl
     \ 000000                      .section farcode,text
-    \ 000000 a00a00   `?L165`:    ldy     ##10
-    \ 000003 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 000005 aa                   tax
-    \ 000006 a00800               ldy     ##8
-    \ 000009 b7..                 lda     [.tiny (_Dp+8)],y
-    \ 00000b 6b                   rtl
-    \ 000000                      .section farcode,text
-    \ 000000          `?L166`:
+    \ 000000          `?L160`:
     \ 000000 b7..                 lda     [.tiny (_Dp+4)],y
     \ 000002 77..                 adc     [.tiny (_Dp+12)],y
     \ 000004 97..                 sta     [.tiny _Dp],y
@@ -1441,38 +1308,38 @@
     \ 000008 ca                   dex
     \ 000009 6b                   rtl
     \ 000000                      .section farcode,text
-    \ 000000 18       `?L167`:    clc
+    \ 000000 18       `?L161`:    clc
     \ 000001 691300               adc     ##19
     \ 000004 a20000               ldx     ##0
     \ 000007 86..                 stx     dp:.tiny (_Dp+2)
     \ 000009 85..                 sta     dp:.tiny _Dp
     \ 00000b 6b                   rtl
     \ 000000                      .section farcode,text
-    \ 000000 690b00   `?L168`:    adc     ##11
+    \ 000000 690b00   `?L162`:    adc     ##11
     \ 000003 86..                 stx     dp:.tiny (_Dp+6)
     \ 000005 85..                 sta     dp:.tiny (_Dp+4)
-    \ 000007 a9....               lda     ##.word0 _Const_000000000000000c
+    \ 000007 a9....               lda     ##.word0 _Const_000000000000000a
     \ 00000a 85..                 sta     dp:.tiny (_Dp+12)
-    \ 00000c a9....               lda     ##.word2 _Const_000000000000000c
+    \ 00000c a9....               lda     ##.word2 _Const_000000000000000a
     \ 00000f 85..                 sta     dp:.tiny (_Dp+14)
     \ 000011 a20300               ldx     ##3
     \ 000014 a00000               ldy     ##0
     \ 000017 18                   clc
     \ 000018 6b                   rtl
     \ 000000                      .section farcode,text
-    \ 000000 691300   `?L169`:    adc     ##19
+    \ 000000 691300   `?L163`:    adc     ##19
     \ 000003 86..                 stx     dp:.tiny (_Dp+6)
     \ 000005 85..                 sta     dp:.tiny (_Dp+4)
-    \ 000007 a9....               lda     ##.word0 _Const_000000000000000c
+    \ 000007 a9....               lda     ##.word0 _Const_000000000000000a
     \ 00000a 85..                 sta     dp:.tiny (_Dp+12)
-    \ 00000c a9....               lda     ##.word2 _Const_000000000000000c
+    \ 00000c a9....               lda     ##.word2 _Const_000000000000000a
     \ 00000f 85..                 sta     dp:.tiny (_Dp+14)
     \ 000011 a20300               ldx     ##3
     \ 000014 a00000               ldy     ##0
     \ 000017 18                   clc
     \ 000018 6b                   rtl
     \ 000000                      .section farcode,text
-    \ 000000          `?L170`:
+    \ 000000          `?L164`:
     \ 000000 22......             jsl     long:printf
     \ 000004 a328                 lda     40,s
     \ 000006 85..                 sta     dp:.tiny (_Dp+2)
@@ -1480,18 +1347,53 @@
     \ 00000a 85..                 sta     dp:.tiny _Dp
     \ 00000c 6b                   rtl
     \ 000000                      .section farcode,text
+    \ 000000 a00a00   `?L166`:    ldy     ##10
+    \ 000003 b7..                 lda     [.tiny (_Dp+12)],y
+    \ 000005 aa                   tax
+    \ 000006 a00800               ldy     ##8
+    \ 000009 b7..                 lda     [.tiny (_Dp+12)],y
+    \ 00000b 6b                   rtl
+    \ 000000                      .section farcode,text
+    \ 000000          `?L167`:
+    \ 000000 85..                 sta     dp:.tiny (_Dp+2)
+    \ 000002 5c......             jmp     long:printf
+    \ 000000                      .section farcode,text
+    \ 000000 691b00   `?L168`:    adc     ##27
+    \ 000003 86..                 stx     dp:.tiny (_Dp+14)
+    \ 000005 85..                 sta     dp:.tiny (_Dp+12)
+    \ 000007 a20300               ldx     ##3
+    \ 00000a a00000               ldy     ##0
+    \ 00000d 18                   clc
+    \ 00000e 6b                   rtl
+    \ 000000                      .section farcode,text
+    \ 000000 a90000   `?L169`:    lda     ##0
+    \ 000003 a00400               ldy     ##4
+    \ 000006 97..                 sta     [.tiny (_Dp+4)],y
+    \ 000008 a00600               ldy     ##6
+    \ 00000b 97..                 sta     [.tiny (_Dp+4)],y
+    \ 00000d 6b                   rtl
+    \ 000000                      .section farcode,text
+    \ 000000          `?L170`:
+    \ 000000 b7..                 lda     [.tiny _Dp],y
+    \ 000002 85..                 sta     dp:.tiny (_Dp+10)
+    \ 000004 a7..                 lda     [.tiny _Dp]
+    \ 000006 85..                 sta     dp:.tiny (_Dp+8)
+    \ 000008 6b                   rtl
+    \ 000000                      .section farcode,text
+    \ 000000 18       `?L171`:    clc
+    \ 000001 690b00               adc     ##11
+    \ 000004 a20000               ldx     ##0
+    \ 000007 86..                 stx     dp:.tiny (_Dp+2)
+    \ 000009 85..                 sta     dp:.tiny _Dp
+    \ 00000b 6b                   rtl
+    \ 000000                      .section farcode,text
     \ 000000          `?L172`:
     \ 000000 a5..                 lda     dp:.tiny (_Dp+8)
-    \ 000002 85..                 sta     dp:.tiny _Dp
+    \ 000002 87..                 sta     [.tiny (_Dp+4)]
     \ 000004 a5..                 lda     dp:.tiny (_Dp+10)
-    \ 000006 85..                 sta     dp:.tiny (_Dp+2)
-    \ 000008 18                   clc
-    \ 000009 a5..                 lda     dp:.tiny _Dp
-    \ 00000b 690c00               adc     ##12
-    \ 00000e 85..                 sta     dp:.tiny _Dp
-    \ 000010 18                   clc
-    \ 000011 a5..                 lda     dp:.tiny _Dp
-    \ 000013 6b                   rtl
+    \ 000006 a00200               ldy     ##2
+    \ 000009 97..                 sta     [.tiny (_Dp+4)],y
+    \ 00000b 6b                   rtl
     \ 000000                      .section farcode,text
     \ 000000 a00a00   `?L173`:    ldy     ##10
     \ 000003 b7..                 lda     [.tiny _Dp],y
@@ -1500,88 +1402,45 @@
     \ 000009 b7..                 lda     [.tiny _Dp],y
     \ 00000b 6b                   rtl
     \ 000000                      .section farcode,text
-    \ 000000          `?L174`:
-    \ 000000 85..                 sta     dp:.tiny (_Dp+2)
-    \ 000002 5c......             jmp     long:printf
-    \ 000000                      .section farcode,text
-    \ 000000 691b00   `?L175`:    adc     ##27
-    \ 000003 86..                 stx     dp:.tiny (_Dp+14)
-    \ 000005 85..                 sta     dp:.tiny (_Dp+12)
-    \ 000007 a20300               ldx     ##3
-    \ 00000a a00000               ldy     ##0
-    \ 00000d 18                   clc
-    \ 00000e 6b                   rtl
-    \ 000000                      .section farcode,text
-    \ 000000 a90000   `?L176`:    lda     ##0
-    \ 000003 a00400               ldy     ##4
-    \ 000006 97..                 sta     [.tiny (_Dp+4)],y
-    \ 000008 a00600               ldy     ##6
-    \ 00000b 97..                 sta     [.tiny (_Dp+4)],y
-    \ 00000d 6b                   rtl
-    \ 000000                      .section farcode,text
-    \ 000000          `?L177`:
-    \ 000000 b7..                 lda     [.tiny _Dp],y
-    \ 000002 85..                 sta     dp:.tiny (_Dp+10)
-    \ 000004 a7..                 lda     [.tiny _Dp]
-    \ 000006 85..                 sta     dp:.tiny (_Dp+8)
-    \ 000008 6b                   rtl
-    \ 000000                      .section farcode,text
-    \ 000000 18       `?L178`:    clc
-    \ 000001 690b00               adc     ##11
-    \ 000004 a20000               ldx     ##0
-    \ 000007 86..                 stx     dp:.tiny (_Dp+2)
-    \ 000009 85..                 sta     dp:.tiny _Dp
-    \ 00000b 6b                   rtl
-    \ 000000                      .section farcode,text
-    \ 000000          `?L179`:
-    \ 000000 a5..                 lda     dp:.tiny (_Dp+8)
-    \ 000002 87..                 sta     [.tiny (_Dp+4)]
-    \ 000004 a5..                 lda     dp:.tiny (_Dp+10)
-    \ 000006 a00200               ldy     ##2
-    \ 000009 97..                 sta     [.tiny (_Dp+4)],y
-    \ 00000b 6b                   rtl
-    \ 000000                      .section farcode,text
-    \ 000000 a00800   `?L180`:    ldy     ##8
-    \ 000003 97..                 sta     [.tiny (_Dp+12)],y
-    \ 000005 8a                   txa
-    \ 000006 a00a00               ldy     ##10
-    \ 000009 97..                 sta     [.tiny (_Dp+12)],y
-    \ 00000b 6b                   rtl
-    \ 000000                      .section farcode,text
-    \ 000000 a00800   `?L181`:    ldy     ##8
-    \ 000003 97..                 sta     [.tiny (_Dp+8)],y
-    \ 000005 8a                   txa
-    \ 000006 a00a00               ldy     ##10
-    \ 000009 97..                 sta     [.tiny (_Dp+8)],y
-    \ 00000b 6b                   rtl
-    \ 000000                      .section farcode,text
-    \ 000000 a01200   `?L182`:    ldy     ##18
+    \ 000000 a01200   `?L174`:    ldy     ##18
     \ 000003 b7..                 lda     [.tiny _Dp],y
     \ 000005 aa                   tax
     \ 000006 a01000               ldy     ##16
     \ 000009 b7..                 lda     [.tiny _Dp],y
     \ 00000b 6b                   rtl
     \ 000000                      .section farcode,text
-    \ 000000 a00400   `?L183`:    ldy     ##4
+    \ 000000 a90a00   `?L175`:    lda     ##10
+    \ 000003 18                   clc
+    \ 000004 a00800               ldy     ##8
+    \ 000007 6b                   rtl
+    \ 000000                      .section farcode,text
+    \ 000000 a00400   `?L176`:    ldy     ##4
     \ 000003 b7..                 lda     [.tiny (_Dp+8)],y
     \ 000005 a00600               ldy     ##6
     \ 000008 17..                 ora     [.tiny (_Dp+8)],y
     \ 00000a 6b                   rtl
     \ 000000                      .section farcode,text
-    \ 000000 a00400   `?L184`:    ldy     ##4
+    \ 000000 a00400   `?L177`:    ldy     ##4
     \ 000003 97..                 sta     [.tiny (_Dp+8)],y
     \ 000005 a00600               ldy     ##6
     \ 000008 97..                 sta     [.tiny (_Dp+8)],y
     \ 00000a 6b                   rtl
+    \ 000000                      .section farcode,text
+    \ 000000 a306     `?L178`:    lda     6,s
+    \ 000002 85..                 sta     dp:.tiny (_Dp+6)
+    \ 000004 a304                 lda     4,s
+    \ 000006 85..                 sta     dp:.tiny (_Dp+4)
+    \ 000008 a5..                 lda     dp:.tiny (_Dp+12)
+    \ 00000a 6b                   rtl
     \ 000000                      .section cfar,rodata
-    \ 000000                      .pubweak _Const_000000000000000c
-    \ 000000          _Const_000000000000000c:
-    \ 000000 0c000000             .quad   12
+    \ 000000                      .pubweak _Const_000000000000000a
+    \ 000000          _Const_000000000000000a:
+    \ 000000 0a000000             .quad   10
     \ 000004 00000000
     \ 000000                      .section cfar,rodata
-    \ 000000                      .pubweak `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]`
-    \ 000000          `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]`:
-    \ 000000 20202d20             .byte   32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13,0
+    \ 000000                      .pubweak `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]`
+    \ 000000          `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]`:
+    \ 000000 20202d20             .byte   32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,32,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13,0
     \ 000004 28253038
     \ 000008 6c6c7829
     \ 00000c 20253038
@@ -1593,13 +1452,13 @@
     \ 000024 64202825
     \ 000028 75207379
     \ 00002c 732c2025
-    \ 000030 6c752075
+    \ 000030 68752075
     \ 000034 7372290d
     \ 000038 00
     \ 000000                      .section cfar,rodata
-    \ 000000                      .pubweak `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]`
-    \ 000000          `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13]`:
-    \ 000000 20202d20             .byte   32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,108,117,32,117,115,114,41,13,0
+    \ 000000                      .pubweak `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]`
+    \ 000000          `_StringLiteral_[32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13]`:
+    \ 000000 20202d20             .byte   32,32,45,32,40,37,48,56,108,108,120,41,32,37,48,56,108,108,120,45,62,37,48,56,108,108,120,45,115,105,122,101,58,37,108,108,100,32,40,37,117,32,115,121,115,44,32,37,104,117,32,117,115,114,41,13,0
     \ 000004 28253038
     \ 000008 6c6c7829
     \ 00000c 20253038
@@ -1611,7 +1470,7 @@
     \ 000024 64202825
     \ 000028 75207379
     \ 00002c 732c2025
-    \ 000030 6c752075
+    \ 000030 68752075
     \ 000034 7372290d
     \ 000038 00
     \ 000000                      .section cfar,rodata
@@ -1685,23 +1544,6 @@
     \ 000000 70747220             .byte   112,116,114,32,32,61,32,37,112,13,0
     \ 000004 203d2025
     \ 000008 700d00
-0304                  
-0305                      // Allocate a new block with the requested size
-0306                      void *newPtr = pmalloc_malloc(pm, requestedSize);
-0307                  
-0308                      // Copy the data from the original block to the new block
-0309                      if (newPtr != NULL)
-0310                      {
-0311                          // Copy the data using memcpy
-0312                          for(uint32_t i = 0; i<node->size; i++) *((char*)newPtr + i) = *((char*)ptr + i);
-0313                  
-0314                          // Free the original block
-0315                          pmalloc_free(pm, ptr);
-0316                      }
-0317                  
-0318                      return newPtr;
-0319                  }
-0320                  */
 
 ##########################
 #                        #
@@ -1709,5 +1551,5 @@
 #                        #
 ##########################
 
-Executable        (Text): 2409 bytes
+Executable        (Text): 2292 bytes
 Constant   __far        :  287 bytes

@@ -1,7 +1,7 @@
 ###############################################################################
 #                                                                             #
 # Calypsi ISO C compiler for 65816                                version 5.2 #
-#                                                       24/Feb/2024  15:59:26 #
+#                                                       24/Feb/2024  16:02:32 #
 # Command line: --core=65816 --code-model=large --data-model=large -D DEBUG   #
 #               --target=Foenix -O2 --speed                                   #
 #               --list-file=obj/example_basic.lst                             #
@@ -18,7 +18,6 @@
     \ 000000                      .rtmodel doubleSize,"32"
     \ 000000                      .rtmodel target,"foenix"
     \ 000000                      .extern _Dp
-    \ 000000                      .extern _FillDP4
     \ 000000                      .extern _Mul32
     \ 000000                      .extern _Vfp
     \ 000000                      .extern pmalloc_addblock
@@ -40,7 +39,7 @@
     \ 000006 d4..                 pei     dp:.tiny (_Dp+14)
     \ 000008 3b                   tsc
     \ 000009 38                   sec
-    \ 00000a e92e00               sbc     ##46
+    \ 00000a e93e00               sbc     ##62
     \ 00000d 1b                   tcs
 0005                  	printf("pmalloc: Basic Example\r\r");	
     \ 00000e a9....               lda     ##.word0 `_StringLiteral_[112,109,97,108,108,111,99,58,32,66,97,115,105,99,32,69,120,97,109,112,108,101,13,13]`
@@ -67,7 +66,7 @@
     \ 000030 22......             jsl     long:pmalloc_init
 0012                  	#ifdef DEBUG
 0013                  	pmalloc_dump_stats(pm);
-    \ 000034 22......             jsl     long:`?L35`
+    \ 000034 22......             jsl     long:`?L32`
 0014                  	#endif
 0015                  	
 0016                  	// Add memory to the heap
@@ -85,13 +84,13 @@
     \ 000050 22......             jsl     long:pmalloc_addblock
 0018                  	#ifdef DEBUG
 0019                  	pmalloc_dump_stats(pm);
-    \ 000054 22......             jsl     long:`?L35`
+    \ 000054 22......             jsl     long:`?L32`
 0020                  	#endif	
 0021                  
-0022                  	#define TESTCOUNT 4
+0022                  	#define TESTCOUNT 8
 0023                  
-0024                  	uint32_t len = 16384;
-    \ 000058 a90040               lda     ##0x4000
+0024                  	uint32_t len = 1024;
+    \ 000058 a90004               lda     ##0x400
     \ 00005b 8307                 sta     7,s
     \ 00005d a90000               lda     ##0
     \ 000060 8309                 sta     9,s
@@ -104,12 +103,12 @@
     \ 000065 8a                   txa
     \ 000066 8305                 sta     5,s
     \ 000068 a303     `?L5`:      lda     3,s
-    \ 00006a c90400               cmp     ##4
+    \ 00006a c90800               cmp     ##8
     \ 00006d a305                 lda     5,s
     \ 00006f e90000               sbc     ##0
-    \ 000072 b003                 bcs     `?L36`
+    \ 000072 b003                 bcs     `?L33`
     \ 000074 4c....               jmp     .kbank `?L4`
-    \ 000077          `?L36`:
+    \ 000077          `?L33`:
 0029                  		printf("Allocating %lu bytes...\r", len*(i+1));
 0030                  		mem[i] = pmalloc_malloc(pm, len*(i+1));
 0031                  		#ifdef DEBUG
@@ -132,7 +131,7 @@
     \ 00008a 85..                 sta     dp:.tiny (_Dp+14)
     \ 00008c          `?L9`:
     \ 00008c a5..                 lda     dp:.tiny (_Dp+12)
-    \ 00008e c90400               cmp     ##4
+    \ 00008e c90800               cmp     ##8
     \ 000091 a5..                 lda     dp:.tiny (_Dp+14)
     \ 000093 e90000               sbc     ##0
     \ 000096 9026                 bcc     `?L8`
@@ -154,7 +153,7 @@
     \ 0000a9 a8                   tay
     \ 0000aa 3b                   tsc
     \ 0000ab 18                   clc
-    \ 0000ac 692e00               adc     ##46
+    \ 0000ac 693e00               adc     ##62
     \ 0000af 1b                   tcs
     \ 0000b0 98                   tya
     \ 0000b1 7a                   ply
@@ -189,7 +188,7 @@
     \ 0000e2 a5..                 lda     dp:.tiny (_Dp+10)
     \ 0000e4 85..                 sta     dp:.tiny (_Dp+2)
     \ 0000e6 22......             jsl     long:pmalloc_free
-    \ 0000ea 22......             jsl     long:`?L35`
+    \ 0000ea 22......             jsl     long:`?L32`
     \ 0000ee a6..                 ldx     dp:.tiny (_Dp+14)
     \ 0000f0 a5..                 lda     dp:.tiny (_Dp+12)
     \ 0000f2 1a                   inc     a
@@ -223,59 +222,54 @@
     \ 000125 8305                 sta     5,s
     \ 000127 68                   pla
     \ 000128 68                   pla
-    \ 000129 d4..                 pei     dp:.tiny (_Dp+10)
-    \ 00012b d4..                 pei     dp:.tiny (_Dp+8)
-    \ 00012d a30d                 lda     13,s
+    \ 000129 a5..                 lda     dp:.tiny (_Dp+8)
+    \ 00012b 85..                 sta     dp:.tiny _Dp
+    \ 00012d a5..                 lda     dp:.tiny (_Dp+10)
     \ 00012f 85..                 sta     dp:.tiny (_Dp+2)
-    \ 000131 a30b                 lda     11,s
-    \ 000133 85..                 sta     dp:.tiny _Dp
-    \ 000135 a309                 lda     9,s
-    \ 000137 aa                   tax
-    \ 000138 a307                 lda     7,s
-    \ 00013a 1a                   inc     a
-    \ 00013b d001                 bne     `?L28`
-    \ 00013d e8                   inx
-    \ 00013e          `?L28`:
-    \ 00013e 86..                 stx     dp:.tiny (_Dp+6)
-    \ 000140 85..                 sta     dp:.tiny (_Dp+4)
-    \ 000142 22......             jsl     long:_Mul32
-    \ 000146 22......             jsl     long:_FillDP4
-    \ 00014a ..                   .byte   .tiny _Dp
-    \ 00014b 22......             jsl     long:pmalloc_malloc
-    \ 00014f da                   phx
-    \ 000150 48                   pha
-    \ 000151 a307                 lda     7,s
-    \ 000153 0a                   asl     a
-    \ 000154 0a                   asl     a
-    \ 000155 85..                 sta     dp:.tiny _Dp
-    \ 000157 3b                   tsc
-    \ 000158 18                   clc
-    \ 000159 692300               adc     ##35
-    \ 00015c a20000               ldx     ##0
-    \ 00015f 18                   clc
-    \ 000160 65..                 adc     dp:.tiny _Dp
-    \ 000162 86..                 stx     dp:.tiny (_Dp+2)
-    \ 000164 85..                 sta     dp:.tiny _Dp
-    \ 000166 68                   pla
-    \ 000167 fa                   plx
-    \ 000168 87..                 sta     [.tiny _Dp]
-    \ 00016a 8a                   txa
-    \ 00016b a00200               ldy     ##2
-    \ 00016e 97..                 sta     [.tiny _Dp],y
-    \ 000170 22......             jsl     long:`?L35`
-    \ 000174 a305                 lda     5,s
-    \ 000176 aa                   tax
-    \ 000177 a303                 lda     3,s
-    \ 000179 1a                   inc     a
-    \ 00017a d001                 bne     `?L33`
-    \ 00017c e8                   inx
-    \ 00017d 8303     `?L33`:     sta     3,s
-    \ 00017f 8a                   txa
-    \ 000180 8305                 sta     5,s
-    \ 000182 a305                 lda     5,s
-    \ 000184 4c....               jmp     .kbank `?L5`
+    \ 000131 a303                 lda     3,s
+    \ 000133 1a                   inc     a
+    \ 000134 08                   php
+    \ 000135 78                   sei
+    \ 000136 8f020100             sta     long:0x102
+    \ 00013a a308                 lda     8,s
+    \ 00013c 8f000100             sta     long:256
+    \ 000140 af040100             lda     long:0x104
+    \ 000144 28                   plp
+    \ 000145 22......             jsl     long:pmalloc_malloc
+    \ 000149 da                   phx
+    \ 00014a 48                   pha
+    \ 00014b a307                 lda     7,s
+    \ 00014d 0a                   asl     a
+    \ 00014e 0a                   asl     a
+    \ 00014f 85..                 sta     dp:.tiny _Dp
+    \ 000151 3b                   tsc
+    \ 000152 18                   clc
+    \ 000153 692300               adc     ##35
+    \ 000156 a20000               ldx     ##0
+    \ 000159 18                   clc
+    \ 00015a 65..                 adc     dp:.tiny _Dp
+    \ 00015c 86..                 stx     dp:.tiny (_Dp+2)
+    \ 00015e 85..                 sta     dp:.tiny _Dp
+    \ 000160 68                   pla
+    \ 000161 fa                   plx
+    \ 000162 87..                 sta     [.tiny _Dp]
+    \ 000164 8a                   txa
+    \ 000165 a00200               ldy     ##2
+    \ 000168 97..                 sta     [.tiny _Dp],y
+    \ 00016a 22......             jsl     long:`?L32`
+    \ 00016e a305                 lda     5,s
+    \ 000170 aa                   tax
+    \ 000171 a303                 lda     3,s
+    \ 000173 1a                   inc     a
+    \ 000174 d001                 bne     `?L30`
+    \ 000176 e8                   inx
+    \ 000177 8303     `?L30`:     sta     3,s
+    \ 000179 8a                   txa
+    \ 00017a 8305                 sta     5,s
+    \ 00017c a305                 lda     5,s
+    \ 00017e 4c....               jmp     .kbank `?L5`
     \ 000000                      .section farcode,text
-    \ 000000          `?L35`:
+    \ 000000          `?L32`:
     \ 000000 a5..                 lda     dp:.tiny (_Dp+8)
     \ 000002 85..                 sta     dp:.tiny _Dp
     \ 000004 a5..                 lda     dp:.tiny (_Dp+10)
@@ -320,5 +314,5 @@
 #                        #
 ##########################
 
-Executable        (Text): 403 bytes
+Executable        (Text): 397 bytes
 Constant   __far        :  69 bytes
