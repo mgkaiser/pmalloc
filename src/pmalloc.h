@@ -23,8 +23,6 @@ typedef struct pmalloc {
 void pmalloc_init(pmalloc_t *pm);
 void pmalloc_addblock(pmalloc_t *pm, void __far *ptr, uint32_t size);           // Add an area of memory available for allocation
 void __far *pmalloc_malloc(pmalloc_t *pm, uint32_t size);                       // Allocate size bytes of memory, returns NULL if out of memory
-void __far *pmalloc_calloc(pmalloc_t *pm, uint32_t num, uint32_t size);         // Allocate num blocks each of size bytes, clear the memory first
-void __far *pmalloc_realloc(pmalloc_t *pm, void *ptr, uint32_t size);           // Reallocate the existing block ptr to a new size and return the new block
 void pmalloc_free(pmalloc_t *pm, void __far *ptr);                              // Deallocate a block of previously allocated memory
 
 uint32_t pmalloc_sizeof(pmalloc_t *pm, void __far *ptr);                        // Return the size of a block of previously allocated memory

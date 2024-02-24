@@ -1,7 +1,7 @@
 ###############################################################################
 #                                                                             #
 # Calypsi linker for 65816                                        version 5.2 #
-#                                                       24/Feb/2024  15:53:41 #
+#                                                       24/Feb/2024  15:59:26 #
 # Command line: --target=Foenix linker/c256-fmx-plain.scm                     #
 #               --output-format=pgz obj/example_basic.o obj/pmalloc.o -o      #
 #               pmalloc.pgz clib-lc-ld-foenix.a --cross-reference --rtattr    #

@@ -19,7 +19,7 @@ int main() {
 	pmalloc_dump_stats(pm);
 	#endif	
 
-	#define TESTCOUNT 4
+	#define TESTCOUNT 8
 
 	uint32_t len = 1024;
 	void* mem[TESTCOUNT];

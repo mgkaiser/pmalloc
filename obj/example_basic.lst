@@ -1,7 +1,7 @@
 ###############################################################################
 #                                                                             #
 # Calypsi ISO C compiler for 65816                                version 5.2 #
-#                                                       24/Feb/2024  15:53:40 #
+#                                                       24/Feb/2024  15:59:26 #
 # Command line: --core=65816 --code-model=large --data-model=large -D DEBUG   #
 #               --target=Foenix -O2 --speed                                   #
 #               --list-file=obj/example_basic.lst                             #
@@ -90,8 +90,8 @@
 0021                  
 0022                  	#define TESTCOUNT 4
 0023                  
-0024                  	uint32_t len = 1024;
-    \ 000058 a90004               lda     ##0x400
+0024                  	uint32_t len = 16384;
+    \ 000058 a90040               lda     ##0x4000
     \ 00005b 8307                 sta     7,s
     \ 00005d a90000               lda     ##0
     \ 000060 8309                 sta     9,s
