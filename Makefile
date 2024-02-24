@@ -1,13 +1,14 @@
 # Output name
-PRG				= pmalloc_test.pgz
-LIB				= lib/pmalloc.a
-LIB_H			= inc/pmalloc.h
+ROOT			= pmalloc
+PRG				= $(ROOT)_test.pgz
+LIB				= lib/$(ROOT).a
+LIB_H			= inc/$(ROOT).h
 
 # Sources
 ASM_SRCS 		=
-C_SRCS 			= pmalloc_test.c
+C_SRCS 			= $(ROOT)_test.c
 LIB_ASM_SRCS 	=
-LIB_C_SRCS 		= pmalloc.c
+LIB_C_SRCS 		= $(ROOT).c
 
 # Model
 MODEL 			= --code-model=large --data-model=large
@@ -17,7 +18,7 @@ LIB_MODEL 		= lc-ld
 LINKER			= linker/c256-fmx-plain.scm
 
 # Include files 
-INC				= '/c/Program Files (x86)/Calypsi-65816/contrib/Foenix-SDK/include'
+INC				= '/c/Program Files (x86)/Calypsi-65816/contrib/Foenix-SDK/include' ~/src/foenix_lib/inc
 
 # Dest
 DEST			= ~/SD/
@@ -30,14 +31,14 @@ LIB_DEST        = ../foenix_lib/
 VPATH 			= src
 LIB_OBJS 		= $(LIB_ASM_SRCS:%.s=obj/%.o) $(LIB_C_SRCS:%.c=obj/%.o)
 OBJS 			= $(ASM_SRCS:%.s=obj/%.o) $(C_SRCS:%.c=obj/%.o)
-LIBS			= clib-$(LIB_MODEL)-foenix.a $(LIB)
+LIBS			= clib-$(LIB_MODEL)-foenix.a ../foenix_lib/$(LIB)
 
 obj/%.o: %.s
 	as65816 --core=65816 $(MODEL) $(DEBUG)--target=Foenix --list-file=$(@:%.o=%.lst) -o $@ $<
 
 obj/%.o: %.c
-	cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) -Iinc -o $@ $<
-	#cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) -Iinc --assembly-source $(@:%.o=%.s) -o $@ $<
+	cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) -o $@ $<
+	#cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) --assembly-source $(@:%.o=%.s) -o $@ $<
 
 $(LIB): $(LIB_OBJS)	
 	nlib $(LIB) $(LIB_OBJS)	
@@ -45,12 +46,17 @@ $(LIB): $(LIB_OBJS)
 $(PRG): $(OBJS) 
 	ln65816 --target=Foenix $(LINKER) --output-format=pgz $^ -o $@ $(LIBS) --cross-reference --rtattr printf=nofloat --rtattr cstartup=Foenix --list-file=$(PRG:%.pgz=%.lst)
 
-all: $(LIB) $(PRG) 
+all: $(LIB) install_lib $(PRG) 
 
 clean:
 	-rm $(PRG:%.pgz=%.lst) $(OBJS:%.o=%.lst) $(OBJS) $(PRG) $(LIB)
+	-rm $(DEST)$(PRG)
+	-rm $(LIB_DEST)$(LIB)
+	-rm $(LIB_DEST)$(LIB_H)
+
+install_lib: $(LIB)	
+	-cp $(LIB) $(LIB_DEST)lib/
+	-cp $(LIB_H) $(LIB_DEST)inc/	
 
 install: all
 	-cp $(PRG) $(DEST)
-	-cp $(LIB) $(LIB_DEST)lib/
-	-cp $(LIB_H) $(LIB_DEST)inc/
