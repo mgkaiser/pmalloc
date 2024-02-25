@@ -26,7 +26,7 @@ DEST			= ~/SD/
 LIB_DEST        = ../foenix_lib/
 
 # Debug
-DEBUG			 = -D DEBUG
+#DEBUG			 = -D DEBUG
 
 # Other stuff
 VPATH 			= src
@@ -35,11 +35,11 @@ OBJS 			= $(ASM_SRCS:%.s=obj/%.o) $(C_SRCS:%.c=obj/%.o)
 LIBS			= clib-$(LIB_MODEL)-foenix.a ../foenix_lib/$(LIB)
 
 obj/%.o: %.s
-	as65816 --core=65816 $(MODEL) $(DEBUG)--target=Foenix --list-file=$(@:%.o=%.lst) -o $@ $<
+	as65816 --core=65816 $(MODEL) $(DEBUG) -D FMX --target=Foenix --list-file=$(@:%.o=%.lst) -o $@ $<
 
 obj/%.o: %.c
-	cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -Iinc -I$(LIB_INC) -I$(INC) -o $@ $<
-	#cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -Iinc -I$(LIB_INC) -I$(INC)  --assembly-source $(@:%.o=%.s) -o $@ $<
+	cc65816 --core=65816 $(MODEL) $(DEBUG) -D FMX --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -Iinc -I$(LIB_INC) -I$(INC) -o $@ $<
+	#cc65816 --core=65816 $(MODEL) $(DEBUG) -D FMX --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -Iinc -I$(LIB_INC) -I$(INC)  --assembly-source $(@:%.o=%.s) -o $@ $<
 
 $(LIB): $(LIB_OBJS)	
 	nlib $(LIB) $(LIB_OBJS)	

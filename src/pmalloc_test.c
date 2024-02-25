@@ -12,9 +12,14 @@ int main() {
 	#ifdef DEBUG
 	pmalloc_dump_stats(pm);
 	#endif
-	
+		
 	// Add memory to the heap
+	#ifdef FMX
 	pmalloc_addblock(pm, (void __far *)0x300000, 0x100000);	
+	#endif
+	#ifdef JR
+	//pmalloc_addblock(pm, (void __far *)0x300000, 0x100000);	
+	#endif
 	#ifdef DEBUG
 	pmalloc_dump_stats(pm);
 	#endif	
