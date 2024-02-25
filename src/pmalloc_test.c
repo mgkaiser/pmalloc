@@ -38,7 +38,13 @@ int main() {
 
 	printf("Deallocaing\r");
 	// Deallocate the memory
-	for(uint32_t i = 0; i<TESTCOUNT; i++) {
+	for(uint32_t i = 0; i<TESTCOUNT; i+=2) {
+		pmalloc_free(pm, mem[i]);
+		#ifdef DEBUG
+		pmalloc_dump_stats(pm);
+		#endif
+	}
+	for(uint32_t i = 1; i<TESTCOUNT; i+=2) {
 		pmalloc_free(pm, mem[i]);
 		#ifdef DEBUG
 		pmalloc_dump_stats(pm);

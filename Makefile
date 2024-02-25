@@ -26,7 +26,7 @@ DEST			= ~/SD/
 LIB_DEST        = ../foenix_lib/
 
 # Debug
-#DEBUG			 = -D DEBUG
+DEBUG			 = -D DEBUG
 
 # Other stuff
 VPATH 			= src

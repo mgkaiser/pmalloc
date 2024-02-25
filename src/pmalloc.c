@@ -61,7 +61,7 @@ void __far *pmalloc_malloc(pmalloc_t *pm, uint32_t size)
 	// If it's not the exact size..
 	if(current->size != size) {
 		// Add a free block that's the remainder size
-		pmalloc_item_t __far *newfree = (pmalloc_item_t __far *)((char __far *)current + sizeof(pmalloc_item_t) + size);
+		pmalloc_item_t __far *newfree = (pmalloc_item_t __far *)((long)current + sizeof(pmalloc_item_t) + size);
 		newfree->size = current->size - sizeof(pmalloc_item_t) - size;
 		newfree->next = current->next;
 		current->next = NULL;
@@ -91,11 +91,7 @@ void pmalloc_free(pmalloc_t *pm, void __far *ptr)
 	if(ptr == NULL) return;
 
 	// Get the node of this memory
-	pmalloc_item_t __far *node = (pmalloc_item_t __far *)(((char __far *)ptr) - sizeof(pmalloc_item_t));
-	#ifdef DEBUG
-	printf("ptr  = %p\r", ptr);
-	printf("node = %p\r", node);
-	#endif
+	pmalloc_item_t __far *node = (pmalloc_item_t __far *)((long)ptr - sizeof(pmalloc_item_t));	
 
 	// Remove it from pm->assigned
 	pmalloc_item_remove(&pm->assigned, node);
@@ -111,11 +107,11 @@ void pmalloc_free(pmalloc_t *pm, void __far *ptr)
 
 void pmalloc_merge(pmalloc_t *pm, pmalloc_item_t __far *node) {
 	// Scan backward for contiguous blocks
-	while (node->prev != NULL && (char __far *)node == (char __far *)node->prev + sizeof(pmalloc_item_t) + node->prev->size)
+	while (node->prev != NULL && (long)node == (long)node->prev + sizeof(pmalloc_item_t) + node->prev->size)
 		node = node->prev;
 
 	// Scan forward and merge free blocks
-	while (node->next == (pmalloc_item_t __far *)((char __far *)node + sizeof(pmalloc_item_t) + node->size)) {
+	while ((long)(node->next) == (long)node + sizeof(pmalloc_item_t) + node->size) {
 		uint32_t nodesize = node->next->size + sizeof(pmalloc_item_t);
 		pm->freemem += sizeof(pmalloc_item_t);
 		pmalloc_item_remove(&pm->available, node->next);
@@ -126,7 +122,7 @@ void pmalloc_merge(pmalloc_t *pm, pmalloc_item_t __far *node) {
 
 uint32_t pmalloc_sizeof(pmalloc_t *pm, void __far *ptr) {
 	// Get the actual pmalloc_item_t of the block
-	pmalloc_item_t __far *node = (pmalloc_item_t __far *)(ptr - sizeof(pmalloc_item_t));
+	pmalloc_item_t __far *node = (pmalloc_item_t __far *)((long)ptr - sizeof(pmalloc_item_t));
 
 	// Return its size
 	return node->size;
