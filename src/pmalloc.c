@@ -43,7 +43,7 @@ void pmalloc_addblock(pmalloc_t *pm, void __far *ptr, uint32_t size)
 	pm->totalnodes++;
 }
 
-void __far *pmalloc_malloc(pmalloc_t *pm, uint16_t size)
+void __far *pmalloc_malloc(pmalloc_t *pm, uint32_t size)
 {
 	// Find a suitable block
 	pmalloc_item_t __far *current = pm->available;

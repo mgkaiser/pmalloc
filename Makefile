@@ -18,7 +18,8 @@ LIB_MODEL 		= lc-ld
 LINKER			= linker/c256-fmx-plain.scm
 
 # Include files 
-INC				= '/c/Program Files (x86)/Calypsi-65816/contrib/Foenix-SDK/include' ~/src/foenix_lib/inc
+INC				= '/c/Program Files (x86)/Calypsi-65816/contrib/Foenix-SDK/include' 
+LIB_INC			= ~/src/foenix_lib/inc
 
 # Dest
 DEST			= ~/SD/
@@ -37,8 +38,8 @@ obj/%.o: %.s
 	as65816 --core=65816 $(MODEL) $(DEBUG)--target=Foenix --list-file=$(@:%.o=%.lst) -o $@ $<
 
 obj/%.o: %.c
-	cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) -o $@ $<
-	#cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -I$(INC) --assembly-source $(@:%.o=%.s) -o $@ $<
+	cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -Iinc -I$(LIB_INC) -I$(INC) -o $@ $<
+	#cc65816 --core=65816 $(MODEL) $(DEBUG) --target=Foenix -O2 --speed --list-file=$(@:%.o=%.lst) -Iinc -I$(LIB_INC) -I$(INC)  --assembly-source $(@:%.o=%.s) -o $@ $<
 
 $(LIB): $(LIB_OBJS)	
 	nlib $(LIB) $(LIB_OBJS)	

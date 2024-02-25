@@ -19,15 +19,16 @@ int main() {
 	pmalloc_dump_stats(pm);
 	#endif	
 
-	#define TESTCOUNT 8
+	#define TESTCOUNT 32
 
 	uint32_t len = 1024;
-	void* mem[TESTCOUNT];
+	void __far * mem[TESTCOUNT];
 
 	// Allocate some memory 
 	for(uint32_t i = 0; i<TESTCOUNT; i++) {
 		printf("Allocating %lu bytes...\r", len*(i+1));
 		mem[i] = pmalloc_malloc(pm, len*(i+1));
+		printf("%p\r",mem[i]);
 		#ifdef DEBUG
 		pmalloc_dump_stats(pm);
 		#endif
