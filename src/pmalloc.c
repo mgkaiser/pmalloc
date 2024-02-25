@@ -151,7 +151,7 @@ void pmalloc_item_insert(fp_pmalloc_item_t *root, void __far *ptr)
 	if(ptr < (void*)*root) {
 		// New block before root
 		pmalloc_item_t __far *node = (pmalloc_item_t __far *)ptr;
-		pmalloc_item_t *oldroot = *root;
+		pmalloc_item_t __far *oldroot = *root;
 		oldroot->prev = node;
 		node->next = oldroot;
 		*root = node;

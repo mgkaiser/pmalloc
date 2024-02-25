@@ -3,3 +3,4 @@ build
 *.pgz
 obj/*.lst
 obj/*.o
+lib/*.a

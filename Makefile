@@ -50,7 +50,8 @@ $(PRG): $(OBJS)
 all: $(LIB) install_lib $(PRG) 
 
 clean:
-	-rm $(PRG:%.pgz=%.lst) $(OBJS:%.o=%.lst) $(OBJS) $(PRG) $(LIB)
+	-rm $(PRG:%.pgz=%.lst) $(OBJS:%.o=%.lst) $(OBJS) $(PRG)
+	-rm $(LIB:%.pgz=%.lst) $(LIB_OBJS:%.o=%.lst) $(LIB_OBJS) $(LIB)
 	-rm $(DEST)$(PRG)
 	-rm $(LIB_DEST)$(LIB)
 	-rm $(LIB_DEST)$(LIB_H)
