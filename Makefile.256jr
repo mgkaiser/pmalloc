@@ -12,7 +12,7 @@ LIB_C_SRCS 		= $(ROOT).c
 
 # Model
 MODEL 			= --code-model=banked --code-slot 5 --data-slot 4
-LIB_MODEL 		= bc
+LIB_MODEL 		= -bc
 
 # Linker
 LINKER			= linker/microkernel-banked.scm
@@ -32,8 +32,7 @@ LIB_DEST        = ../foenixjr_lib/
 VPATH 			= src
 LIB_OBJS 		= $(LIB_ASM_SRCS:%.s=obj/%.o) $(LIB_C_SRCS:%.c=obj/%.o)
 OBJS 			= $(ASM_SRCS:%.s=obj/%.o) $(C_SRCS:%.c=obj/%.o)
-#LIBS			= microkernel-65c02-$(LIB_MODEL)-foenix.a ../foenixjr_lib/$(LIB)
-LIBS			= clib-65c02-foenix.a ../foenixjr_lib/$(LIB)
+LIBS			= microkernel-65c02$(LIB_MODEL)-foenix.a ../foenixjr_lib/$(LIB)
 
 obj/%.o: %.s
 	as6502 --core=65c02 $(MODEL) $(DEBUG) -D JR --target=Foenix --list-file=$(@:%.o=%.lst) -o $@ $<

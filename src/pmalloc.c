@@ -11,13 +11,13 @@
 // allocation.
 //
 
+#include <stdio.h>
 #include "pmalloc.h"
 
-#ifdef DEBUG
-	#include <stdio.h>
-#endif
+// Pointer to heap header
+pmalloc_t __far *pm;
 
-void pmalloc_init(pmalloc_t *pm) {
+void pmalloc_init(pmalloc_t __far *pm) {
 	#ifdef DEBUG
 		printf("pmalloc: DEBUG Enabled\r");
 	#endif
@@ -29,7 +29,7 @@ void pmalloc_init(pmalloc_t *pm) {
 	pm->totalnodes = 0;
 }
 
-void pmalloc_addblock(pmalloc_t *pm, void __far *ptr, uint32_t size)
+void pmalloc_addblock(pmalloc_t __far *pm, void __far *ptr, uint32_t size)
 {
 	// Get the usable size of the block
 	((pmalloc_item_t __far *)ptr)->size = size - sizeof(pmalloc_item_t);
@@ -43,7 +43,7 @@ void pmalloc_addblock(pmalloc_t *pm, void __far *ptr, uint32_t size)
 	pm->totalnodes++;
 }
 
-void __far *pmalloc_malloc(pmalloc_t *pm, uint32_t size)
+void __far *pmalloc_malloc(pmalloc_t __far *pm, uint32_t size)
 {
 	// Find a suitable block
 	pmalloc_item_t __far *current = pm->available;
@@ -85,7 +85,7 @@ void __far *pmalloc_malloc(pmalloc_t *pm, uint32_t size)
 	return ((char __far *)current) + sizeof(pmalloc_item_t);
 }
 
-void pmalloc_free(pmalloc_t *pm, void __far *ptr)
+void pmalloc_free(pmalloc_t __far *pm, void __far *ptr)
 {
 	// Match stdlib free() NULL interface
 	if(ptr == NULL) return;
@@ -105,7 +105,7 @@ void pmalloc_free(pmalloc_t *pm, void __far *ptr)
 	pmalloc_merge(pm, node);
 }
 
-void pmalloc_merge(pmalloc_t *pm, pmalloc_item_t __far *node) {
+void pmalloc_merge(pmalloc_t __far *pm, pmalloc_item_t __far *node) {
 	// Scan backward for contiguous blocks
 	while (node->prev != NULL && (long)node == (long)node->prev + sizeof(pmalloc_item_t) + node->prev->size)
 		node = node->prev;
@@ -120,7 +120,7 @@ void pmalloc_merge(pmalloc_t *pm, pmalloc_item_t __far *node) {
 	}
 }
 
-uint32_t pmalloc_sizeof(pmalloc_t *pm, void __far *ptr) {
+uint32_t pmalloc_sizeof(pmalloc_t __far *pm, void __far *ptr) {
 	// Get the actual pmalloc_item_t of the block
 	pmalloc_item_t __far *node = (pmalloc_item_t __far *)((long)ptr - sizeof(pmalloc_item_t));
 
@@ -128,10 +128,10 @@ uint32_t pmalloc_sizeof(pmalloc_t *pm, void __far *ptr) {
 	return node->size;
 }
 
-uint32_t pmalloc_totalmem(pmalloc_t *pm) { return pm->totalmem; }
-uint32_t pmalloc_freemem(pmalloc_t *pm) { return pm->freemem; }
-uint32_t pmalloc_usedmem(pmalloc_t *pm) { return pm->totalmem - pm->freemem; }
-uint32_t pmalloc_overheadmem(pmalloc_t *pm) { return pm->totalnodes * sizeof(pmalloc_item_t); }
+uint32_t pmalloc_totalmem(pmalloc_t __far *pm) { return pm->totalmem; }
+uint32_t pmalloc_freemem(pmalloc_t __far *pm) { return pm->freemem; }
+uint32_t pmalloc_usedmem(pmalloc_t __far *pm) { return pm->totalmem - pm->freemem; }
+uint32_t pmalloc_overheadmem(pmalloc_t __far *pm) { return pm->totalnodes * sizeof(pmalloc_item_t); }
 
 void pmalloc_item_insert(fp_pmalloc_item_t *root, void __far *ptr)
 {
@@ -195,8 +195,7 @@ void pmalloc_item_remove(fp_pmalloc_item_t *root, pmalloc_item_t __far *node)
 	node->prev = NULL;
 }
 
-#ifdef DEBUG
-void pmalloc_dump_stats(pmalloc_t *pm) {
+void pmalloc_dump_stats(pmalloc_t __far *pm) {
 	printf("---------------------\r");
 	printf(" - freemem: %lu\r", pm->freemem);
 	printf(" - totalmem: %lu\r", pm->totalmem);
@@ -212,4 +211,3 @@ void pmalloc_dump_stats(pmalloc_t *pm) {
 
 	printf("---------------------\r");
 }
-#endif
