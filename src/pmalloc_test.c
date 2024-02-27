@@ -19,6 +19,9 @@ int main() {
 	#ifdef JR
 	//pmalloc_addblock(pm, (void __far *)0x300000, 0x100000);	
 	#endif	
+	#ifdef X16
+	//pmalloc_addblock(pm, (void __far *)0x300000, 0x100000);	
+	#endif	
 	pmalloc_dump_stats(pm);
 	
 
