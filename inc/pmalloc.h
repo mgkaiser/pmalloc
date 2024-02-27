@@ -35,8 +35,8 @@ uint32_t pmalloc_overheadmem(pmalloc_t __far *pm);                              
 
 // Internals
 void pmalloc_merge(pmalloc_t __far *pm, fp_pmalloc_item_t node);                        // Merge free blocks around this block
-void pmalloc_item_insert(fp_pmalloc_item_t *root, void __far *ptr);                     // Insert an item into the linked list
-void pmalloc_item_remove(fp_pmalloc_item_t *root, pmalloc_item_t __far *node);          // Remove an item from a linked list
+void pmalloc_item_insert(fp_pmalloc_item_t __far *root, void __far *ptr);               // Insert an item into the linked list
+void pmalloc_item_remove(fp_pmalloc_item_t __far *root, pmalloc_item_t __far *node);    // Remove an item from a linked list
 void pmalloc_dump_stats(pmalloc_t __far *pm);                                           // Debug Function
 
 

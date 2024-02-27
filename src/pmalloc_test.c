@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include "pmalloc.h"
 
+pmalloc_t pmblock;
+
 int main() {
 	printf("pmalloc: Basic Example\r\r");	
-	
-	pmalloc_t pmblock;
-	pm = &pmblock;
+		
+	pm = (pmalloc_t __far *)&pmblock;
 	
 	// Initialise our pmalloc
 	pmalloc_init(pm);	

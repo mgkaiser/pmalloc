@@ -133,7 +133,7 @@ uint32_t pmalloc_freemem(pmalloc_t __far *pm) { return pm->freemem; }
 uint32_t pmalloc_usedmem(pmalloc_t __far *pm) { return pm->totalmem - pm->freemem; }
 uint32_t pmalloc_overheadmem(pmalloc_t __far *pm) { return pm->totalnodes * sizeof(pmalloc_item_t); }
 
-void pmalloc_item_insert(fp_pmalloc_item_t *root, void __far *ptr)
+void pmalloc_item_insert(fp_pmalloc_item_t __far *root, void __far *ptr)
 {
 	// No existing root
 	if(*root == NULL) {
@@ -176,7 +176,7 @@ void pmalloc_item_insert(fp_pmalloc_item_t *root, void __far *ptr)
 	} 
 }
 
-void pmalloc_item_remove(fp_pmalloc_item_t *root, pmalloc_item_t __far *node) 
+void pmalloc_item_remove(fp_pmalloc_item_t __far *root, pmalloc_item_t __far *node) 
 {
 	// Remove the node
 	if(node->prev) node->prev->next = node->next;
